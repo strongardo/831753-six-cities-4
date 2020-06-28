@@ -1,12 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Reviews from "../reviews/reviews.jsx";
-import OfferMap from "../offer-map/offer-map.jsx";
+import Map from "../map/map.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
 
 const OfferPage = (props) => {
-  const {offer, nearestOffers} = props;
+  const { offer, nearestOffers, coordinates } = props;
   const {
+    id,
     name,
     descriptions,
     advantages,
@@ -19,48 +20,44 @@ const OfferPage = (props) => {
     guestsCount,
     isPremium,
     reviews,
-    coordinates
+    // coordinates,
   } = offer;
-
-  const nearestCoordinates = nearestOffers.map((nearestOffer) => {
-    return nearestOffer.coordinates;
-  });
 
   const photosMarkup = urls.map((photoUrl) => {
     return (
       <div className="property__image-wrapper" key={photoUrl}>
-        <img
-          className="property__image"
-          src={photoUrl}
-          alt="Photo studio"
-        />
+        <img className="property__image" src={photoUrl} alt="Photo studio" />
       </div>
     );
   });
 
   const advantagesMarkup = advantages.map((advantage) => {
     return (
-      <li className="property__inside-item" key={advantage}>{advantage}</li>
+      <li className="property__inside-item" key={advantage}>
+        {advantage}
+      </li>
     );
   });
 
-  const premiumMarkup = (isPremium) ?
-    (<div className="property__mark">
+  const premiumMarkup = isPremium ? (
+    <div className="property__mark">
       <span>Premium</span>
-    </div>)
-    : null;
+    </div>
+  ) : null;
 
   const descriptionMarkup = descriptions.map((description) => {
     return (
-      <p className="property__text" key={description}>{description}</p>
+      <p className="property__text" key={description}>
+        {description}
+      </p>
     );
   });
 
-  const starsQuantity = (starsCount <= 5) ? starsCount : 5;
+  const starsQuantity = starsCount <= 5 ? starsCount : 5;
   const raitingPercent = `${Math.round(starsQuantity) * 20}%`;
 
-  const ownerClassName = (owner.isSuper) ?
-    `property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper`
+  const ownerClassName = owner.isSuper
+    ? `property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper`
     : `property__avatar-wrapper user__avatar-wrapper`;
 
   return (
@@ -100,17 +97,13 @@ const OfferPage = (props) => {
       <main className="page__main page__main--property">
         <section className="property">
           <div className="property__gallery-container container">
-            <div className="property__gallery">
-              {photosMarkup}
-            </div>
+            <div className="property__gallery">{photosMarkup}</div>
           </div>
           <div className="property__container container">
             <div className="property__wrapper">
               {premiumMarkup}
               <div className="property__name-wrapper">
-                <h1 className="property__name">
-                  {name}
-                </h1>
+                <h1 className="property__name">{name}</h1>
                 <button
                   className="property__bookmark-button button"
                   type="button"
@@ -127,7 +120,7 @@ const OfferPage = (props) => {
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{width: raitingPercent}} />
+                  <span style={{ width: raitingPercent }} />
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">
@@ -151,9 +144,7 @@ const OfferPage = (props) => {
               </div>
               <div className="property__inside">
                 <h2 className="property__inside-title">What&apos;s inside</h2>
-                <ul className="property__inside-list">
-                  {advantagesMarkup}
-                </ul>
+                <ul className="property__inside-list">{advantagesMarkup}</ul>
               </div>
               <div className="property__host">
                 <h2 className="property__host-title">Meet the host</h2>
@@ -169,15 +160,13 @@ const OfferPage = (props) => {
                   </div>
                   <span className="property__user-name">{owner.name}</span>
                 </div>
-                <div className="property__description">
-                  {descriptionMarkup}
-                </div>
+                <div className="property__description">{descriptionMarkup}</div>
               </div>
               <Reviews reviews={reviews} />
             </div>
           </div>
           <section className="property__map map">
-            <OfferMap offerCoordinates={coordinates} coordinates={nearestCoordinates} />
+            <Map markers={coordinates} activeMarker={id} />
           </section>
         </section>
         <div className="container">

@@ -1,6 +1,6 @@
-import React, {PureComponent} from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import {Switch, Route, BrowserRouter} from "react-router-dom";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
 import Main from "../main/main.jsx";
 import OfferPage from "../offer-page/offer-page.jsx";
 
@@ -11,6 +11,11 @@ class App extends PureComponent {
     this.state = {
       offer: null,
     };
+
+    this.coordinates = this.props.offers.map(({ coordinates, id }) => ({
+      id,
+      coordinates,
+    }));
 
     this._handleCardTitleClick = this._handleCardTitleClick.bind(this);
   }
@@ -25,7 +30,12 @@ class App extends PureComponent {
             {this._renderPage()}
           </Route>
           <Route exact path="/dev-offer">
-            <OfferPage offer={this.props.offers[1]} nearestOffers={nearestOffers} />
+            <OfferPage
+              offer={this.props.offers[1]}
+              coordinates={this.coordinates}
+              // for list
+              nearestOffers={nearestOffers}
+            />
           </Route>
         </Switch>
       </BrowserRouter>
@@ -64,26 +74,26 @@ class App extends PureComponent {
 App.propTypes = {
   offersCount: PropTypes.number.isRequired,
   offers: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        descriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
-        advantages: PropTypes.arrayOf(PropTypes.string).isRequired,
-        owner: PropTypes.shape({
-          url: PropTypes.string.isRequired,
-          name: PropTypes.string.isRequired,
-          isSuper: PropTypes.bool.isRequired,
-        }).isRequired,
-        type: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      descriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+      advantages: PropTypes.arrayOf(PropTypes.string).isRequired,
+      owner: PropTypes.shape({
         url: PropTypes.string.isRequired,
-        urls: PropTypes.arrayOf(PropTypes.string).isRequired,
-        starsCount: PropTypes.number.isRequired,
-        bedroomsCount: PropTypes.number.isRequired,
-        guestsCount: PropTypes.number.isRequired,
-        isPremium: PropTypes.bool.isRequired,
-        coordinates: PropTypes.arrayOf(PropTypes.number),
-        id: PropTypes.number.isRequired,
-      })
+        name: PropTypes.string.isRequired,
+        isSuper: PropTypes.bool.isRequired,
+      }).isRequired,
+      type: PropTypes.string.isRequired,
+      price: PropTypes.number.isRequired,
+      url: PropTypes.string.isRequired,
+      urls: PropTypes.arrayOf(PropTypes.string).isRequired,
+      starsCount: PropTypes.number.isRequired,
+      bedroomsCount: PropTypes.number.isRequired,
+      guestsCount: PropTypes.number.isRequired,
+      isPremium: PropTypes.bool.isRequired,
+      coordinates: PropTypes.arrayOf(PropTypes.number),
+      id: PropTypes.number.isRequired,
+    })
   ).isRequired,
 };
 

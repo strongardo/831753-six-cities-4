@@ -1,10 +1,12 @@
 export default [
   {
     name: `Beautiful & luxurious apartment at great location`,
-    descriptions: [`A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
+    descriptions: [
+      `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
     The building is green and from 18th century.`,
-    `An independent House, strategically located between Rembrand Square and National Opera,
-    but where the bustle of the city comes to rest in this alley flowery and colorful.`],
+      `An independent House, strategically located between Rembrand Square and National Opera,
+    but where the bustle of the city comes to rest in this alley flowery and colorful.`,
+    ],
     type: `Apartment`,
     owner: {
       url: `img/avatar-angelina.jpg`,
@@ -25,7 +27,12 @@ export default [
     ],
     price: 128,
     url: `img/apartment-01.jpg`,
-    urls: [`img/apartment-01.jpg`, `img/apartment-02.jpg`, `img/apartment-03.jpg`, `img/room.jpg`],
+    urls: [
+      `img/apartment-01.jpg`,
+      `img/apartment-02.jpg`,
+      `img/apartment-03.jpg`,
+      `img/room.jpg`,
+    ],
     starsCount: 3.7,
     bedroomsCount: 4,
     guestsCount: 8,
@@ -46,10 +53,12 @@ export default [
   },
   {
     name: `Wood and stone place`,
-    descriptions: [`A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
+    descriptions: [
+      `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
     The building is green and from 18th century.`,
-    `An independent House, strategically located between Rembrand Square and National Opera,
-    but where the bustle of the city comes to rest in this alley flowery and colorful.`],
+      `An independent House, strategically located between Rembrand Square and National Opera,
+    but where the bustle of the city comes to rest in this alley flowery and colorful.`,
+    ],
     type: `Private room`,
     owner: {
       url: `img/avatar-max.jpg`,
@@ -66,7 +75,12 @@ export default [
     ],
     price: 80,
     url: `img/apartment-02.jpg`,
-    urls: [`img/apartment-01.jpg`, `img/apartment-02.jpg`, `img/apartment-03.jpg`, `img/room.jpg`],
+    urls: [
+      `img/apartment-01.jpg`,
+      `img/apartment-02.jpg`,
+      `img/apartment-03.jpg`,
+      `img/room.jpg`,
+    ],
     starsCount: 4,
     bedroomsCount: 3,
     guestsCount: 6,
@@ -83,7 +97,7 @@ export default [
         starsCount: 4,
         url: `img/avatar-max.jpg`,
         name: `Max`,
-        date: `March 17, 2019`,
+        date: new Date("2020-02-22"),
         id: 1,
       },
       {
@@ -94,7 +108,7 @@ export default [
         starsCount: 3,
         url: `img/avatar-angelina.jpg`,
         name: `Kate`,
-        date: `July 22, 2020`,
+        date: new Date("2020-05-22"),
         id: 2,
       },
     ],
@@ -102,25 +116,28 @@ export default [
   },
   {
     name: `Canal View Prinsengracht`,
-    descriptions: [`A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
+    descriptions: [
+      `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
     The building is green and from 18th century.`,
-    `An independent House, strategically located between Rembrand Square and National Opera,
-    but where the bustle of the city comes to rest in this alley flowery and colorful.`],
+      `An independent House, strategically located between Rembrand Square and National Opera,
+    but where the bustle of the city comes to rest in this alley flowery and colorful.`,
+    ],
     type: `Apartment`,
     owner: {
+      date: new Date("2020-05-22"),
       url: `img/avatar-angelina.jpg`,
       name: `Angelina`,
       isSuper: false,
     },
-    advantages: [
-      `Wi-Fi`,
-      `Kitchen`,
-      `Dishwasher`,
-      `Towels`,
-    ],
+    advantages: [`Wi-Fi`, `Kitchen`, `Dishwasher`, `Towels`],
     price: 132,
     url: `img/apartment-03.jpg`,
-    urls: [`img/apartment-01.jpg`, `img/apartment-02.jpg`, `img/apartment-03.jpg`, `img/room.jpg`],
+    urls: [
+      `img/apartment-01.jpg`,
+      `img/apartment-02.jpg`,
+      `img/apartment-03.jpg`,
+      `img/room.jpg`,
+    ],
     starsCount: 4,
     bedroomsCount: 2,
     guestsCount: 4,
@@ -135,7 +152,7 @@ export default [
         starsCount: 3,
         url: `img/avatar-angelina.jpg`,
         name: `Kate`,
-        date: `May 7, 2020`,
+        date: new Date("2020-02-22"),
         id: 1,
       },
     ],
@@ -143,10 +160,12 @@ export default [
   },
   {
     name: `Nice, cozy, warm big bed apartment`,
-    descriptions: [`A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
+    descriptions: [
+      `A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
     The building is green and from 18th century.`,
-    `An independent House, strategically located between Rembrand Square and National Opera,
-    but where the bustle of the city comes to rest in this alley flowery and colorful.`],
+      `An independent House, strategically located between Rembrand Square and National Opera,
+    but where the bustle of the city comes to rest in this alley flowery and colorful.`,
+    ],
     type: `Apartment`,
     owner: {
       url: `img/avatar-max.jpg`,
@@ -164,7 +183,12 @@ export default [
     ],
     price: 180,
     url: `img/room.jpg`,
-    urls: [`img/apartment-01.jpg`, `img/apartment-02.jpg`, `img/apartment-03.jpg`, `img/room.jpg`],
+    urls: [
+      `img/apartment-01.jpg`,
+      `img/apartment-02.jpg`,
+      `img/apartment-03.jpg`,
+      `img/room.jpg`,
+    ],
     starsCount: 5,
     bedroomsCount: 1,
     guestsCount: 2,
@@ -181,7 +205,7 @@ export default [
         starsCount: 4,
         url: `img/avatar-max.jpg`,
         name: `Max`,
-        date: `April 24, 2019`,
+        date: new Date("2020-02-22"),
         id: 1,
       },
     ],

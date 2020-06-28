@@ -1,9 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+const dateToFormatString = (date) =>
+  new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
+
 const Review = (props) => {
-  const {review} = props;
+  const { review } = props;
   const raitingPercent = `${review.starsCount * 20}%`;
+  const date = dateToFormatString(review.date);
 
   return (
     <li className="reviews__item">
@@ -22,15 +30,13 @@ const Review = (props) => {
       <div className="reviews__info">
         <div className="reviews__rating rating">
           <div className="reviews__stars rating__stars">
-            <span style={{width: raitingPercent}} />
+            <span style={{ width: raitingPercent }} />
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
-        <p className="reviews__text">
-          {review.text}
-        </p>
+        <p className="reviews__text">{review.text}</p>
         <time className="reviews__time" dateTime="2019-04-24">
-          {review.date}
+          {date}
         </time>
       </div>
     </li>

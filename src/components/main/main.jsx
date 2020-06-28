@@ -4,12 +4,12 @@ import OffersList from "../offers-list/offers-list.jsx";
 import Map from "../map/map.jsx";
 
 const Main = (props) => {
+  const { offersCount, offers, onCardTitleClick } = props;
 
-  const {offersCount, offers, onCardTitleClick} = props;
-
-  const coordinates = offers.map((offer) => {
-    return offer.coordinates;
-  });
+  const coordinates = offers.map(({ coordinates, id }) => ({
+    id,
+    coordinates,
+  }));
 
   return (
     <div className="page page--gray page--main">
@@ -87,7 +87,9 @@ const Main = (props) => {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offersCount} places to stay in Amsterdam</b>
+              <b className="places__found">
+                {offersCount} places to stay in Amsterdam
+              </b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -131,7 +133,7 @@ const Main = (props) => {
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map coordinates={coordinates} />
+                <Map markers={coordinates} />
               </section>
             </div>
           </div>
@@ -144,16 +146,16 @@ const Main = (props) => {
 Main.propTypes = {
   offersCount: PropTypes.number.isRequired,
   offers: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
-        url: PropTypes.string.isRequired,
-        starsCount: PropTypes.number.isRequired,
-        isPremium: PropTypes.bool.isRequired,
-        coordinates: PropTypes.arrayOf(PropTypes.number),
-        id: PropTypes.number.isRequired,
-      })
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      price: PropTypes.number.isRequired,
+      url: PropTypes.string.isRequired,
+      starsCount: PropTypes.number.isRequired,
+      isPremium: PropTypes.bool.isRequired,
+      coordinates: PropTypes.arrayOf(PropTypes.number),
+      id: PropTypes.number.isRequired,
+    })
   ).isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
 };
