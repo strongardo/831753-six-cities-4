@@ -6,5 +6,5 @@ export const dateToFormatString = (date) =>
   }).format(date);
 
 export const sortByDate = (array) => {
-  return array.sort((a, b) => (b.date) - (a.date));
+  return array.slice().sort((a, b) => (b.date) - (a.date));
 };
