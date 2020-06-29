@@ -39,7 +39,7 @@ exports[`Should OfferCard render correctly 1`] = `
         <b
           className="place-card__price-value"
         >
-          120
+          128
         </b>
         <span
           className="place-card__price-text"
@@ -76,7 +76,7 @@ exports[`Should OfferCard render correctly 1`] = `
         <span
           style={
             Object {
-              "width": "80%",
+              "width": "74%",
             }
           }
         />

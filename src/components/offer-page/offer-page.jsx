@@ -5,9 +5,11 @@ import Map from "../map/map.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
 
 const OfferPage = (props) => {
-  const { offer, nearestOffers, coordinates } = props;
+  const {currentId, offers, onCardTitleClick} = props;
+  const currentOffer = offers.find((offer) => offer.id === currentId);
+  const nearestOffers = offers.filter((offer) => offer.id !== currentId);
+
   const {
-    id,
     name,
     descriptions,
     advantages,
@@ -20,8 +22,12 @@ const OfferPage = (props) => {
     guestsCount,
     isPremium,
     reviews,
-    // coordinates,
-  } = offer;
+  } = currentOffer;
+
+  const markers = offers.map(({coordinates, id}) => ({
+    id,
+    coordinates,
+  }));
 
   const photosMarkup = urls.map((photoUrl) => {
     return (
@@ -120,7 +126,7 @@ const OfferPage = (props) => {
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{ width: raitingPercent }} />
+                  <span style={{width: raitingPercent}} />
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">
@@ -166,7 +172,7 @@ const OfferPage = (props) => {
             </div>
           </div>
           <section className="property__map map">
-            <Map markers={coordinates} activeMarker={id} />
+            <Map markers={markers} activeMarker={currentId} />
           </section>
         </section>
         <div className="container">
@@ -177,7 +183,7 @@ const OfferPage = (props) => {
             <div className="near-places__list places__list">
               <OffersList
                 offers={nearestOffers}
-                // onCardTitleClick={onCardTitleClick}
+                onCardTitleClick={onCardTitleClick}
               />
             </div>
           </section>
@@ -188,7 +194,7 @@ const OfferPage = (props) => {
 };
 
 OfferPage.propTypes = {
-  offer: PropTypes.shape({
+  offers: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     descriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
     advantages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -206,9 +212,10 @@ OfferPage.propTypes = {
     isPremium: PropTypes.bool.isRequired,
     reviews: PropTypes.arrayOf(PropTypes.object).isRequired,
     coordinates: PropTypes.arrayOf(PropTypes.number),
-  }).isRequired,
-  nearestOffers: PropTypes.array.isRequired,
-  // onCardTitleClick: PropTypes.func.isRequired,
+    id: PropTypes.number.isRequired,
+  })).isRequired,
+  currentId: PropTypes.number.isRequired,
+  onCardTitleClick: PropTypes.func.isRequired,
 };
 
 export default OfferPage;

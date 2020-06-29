@@ -4,11 +4,11 @@ import OffersList from "../offers-list/offers-list.jsx";
 import Map from "../map/map.jsx";
 
 const Main = (props) => {
-  const { offersCount, offers, onCardTitleClick } = props;
+  const {offersCount, offers, onCardTitleClick} = props;
 
-  const coordinates = offers.map(({ coordinates, id }) => ({
-    id,
+  const markers = offers.map(({coordinates, id}) => ({
     coordinates,
+    id,
   }));
 
   return (
@@ -133,7 +133,7 @@ const Main = (props) => {
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map markers={coordinates} />
+                <Map markers={markers} />
               </section>
             </div>
           </div>
@@ -146,16 +146,16 @@ const Main = (props) => {
 Main.propTypes = {
   offersCount: PropTypes.number.isRequired,
   offers: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      url: PropTypes.string.isRequired,
-      starsCount: PropTypes.number.isRequired,
-      isPremium: PropTypes.bool.isRequired,
-      coordinates: PropTypes.arrayOf(PropTypes.number),
-      id: PropTypes.number.isRequired,
-    })
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        url: PropTypes.string.isRequired,
+        starsCount: PropTypes.number.isRequired,
+        isPremium: PropTypes.bool.isRequired,
+        coordinates: PropTypes.arrayOf(PropTypes.number),
+        id: PropTypes.number.isRequired,
+      })
   ).isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
 };

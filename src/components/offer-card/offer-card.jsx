@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const OfferCard = (props) => {
-  const {offer, onCardHover} = props;
+  const {offer, onCardHover, onCardTitleClick} = props;
   const {name, type, price, url, starsCount, isPremium, id} = offer;
 
   const handleHover = () => {
@@ -12,7 +12,7 @@ const OfferCard = (props) => {
   const handleTitleClick = (evt) => {
     evt.preventDefault();
 
-    // onCardTitleClick(offer);
+    onCardTitleClick(id);
   };
 
   const premiumMarkup = isPremium ?
@@ -78,7 +78,7 @@ OfferCard.propTypes = {
     id: PropTypes.number.isRequired,
   }).isRequired,
   onCardHover: PropTypes.func.isRequired,
-  // onCardTitleClick: PropTypes.func.isRequired,
+  onCardTitleClick: PropTypes.func.isRequired,
 };
 
 export default OfferCard;

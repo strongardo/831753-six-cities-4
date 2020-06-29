@@ -1,9 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Review from "../review/review.jsx";
+import {sortByDate} from "../../utils.js";
 
 const Reviews = (props) => {
   const reviews = (props.reviews.length <= 10) ? props.reviews : props.reviews.slice(0, 10);
+  const sortedReviews = sortByDate(reviews);
 
   return (
     <section className="property__reviews reviews">
@@ -11,7 +13,7 @@ const Reviews = (props) => {
         Reviews · <span className="reviews__amount">{reviews.length}</span>
       </h2>
       <ul className="reviews__list">
-        {reviews.map((review) => {
+        {sortedReviews.map((review) => {
           return <Review key={review.id} review={review} />;
         })}
       </ul>
@@ -152,7 +154,14 @@ const Reviews = (props) => {
 };
 
 Reviews.propTypes = {
-  reviews: PropTypes.arrayOf(PropTypes.object).isRequired,
+  reviews: PropTypes.arrayOf(PropTypes.shape({
+    text: PropTypes.string.isRequired,
+    starsCount: PropTypes.number.isRequired,
+    url: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    date: PropTypes.object.isRequired,
+    id: PropTypes.number.isRequired,
+  })).isRequired,
 };
 
 export default Reviews;

@@ -1,15 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-
-const dateToFormatString = (date) =>
-  new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(date);
+import {dateToFormatString} from "../../utils.js";
 
 const Review = (props) => {
-  const { review } = props;
+  const {review} = props;
   const raitingPercent = `${review.starsCount * 20}%`;
   const date = dateToFormatString(review.date);
 
@@ -30,7 +24,7 @@ const Review = (props) => {
       <div className="reviews__info">
         <div className="reviews__rating rating">
           <div className="reviews__stars rating__stars">
-            <span style={{ width: raitingPercent }} />
+            <span style={{width: raitingPercent}} />
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
@@ -44,7 +38,14 @@ const Review = (props) => {
 };
 
 Review.propTypes = {
-  review: PropTypes.object.isRequired,
+  review: PropTypes.shape({
+    text: PropTypes.string.isRequired,
+    starsCount: PropTypes.number.isRequired,
+    url: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    date: PropTypes.object.isRequired,
+    id: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default Review;

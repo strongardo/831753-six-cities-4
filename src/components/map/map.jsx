@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, {PureComponent} from "react";
 import leaflet from "leaflet";
 import PropTypes from "prop-types";
 
@@ -10,7 +10,7 @@ class Map extends PureComponent {
   }
 
   render() {
-    return <div id="map" ref={this._mapRef} style={{ height: `100%` }} />;
+    return <div id="map" ref={this._mapRef} style={{height: `100%`}} />;
   }
 
   componentDidMount() {
@@ -35,16 +35,16 @@ class Map extends PureComponent {
       iconSize: [30, 30],
     });
 
-    leaflet
+    this._layer = leaflet
       .tileLayer(
-        `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`,
-        {
-          attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`,
-        }
+          `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`,
+          {
+            attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`,
+          }
       )
       .addTo(map);
 
-    this.props.markers.forEach(({ coordinates, id }) => {
+    this.props.markers.forEach(({coordinates, id}) => {
       leaflet
         .marker(coordinates, {
           icon: id === this.props.activeMarker ? iconActive : icon,
@@ -56,11 +56,12 @@ class Map extends PureComponent {
 
 Map.propTypes = {
   markers: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      coordinates: PropTypes.arrayOf(PropTypes.number),
-    })
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        coordinates: PropTypes.arrayOf(PropTypes.number),
+      })
   ),
+  activeMarker: PropTypes.number,
 };
 
 export default Map;
