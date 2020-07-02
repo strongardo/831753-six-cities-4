@@ -105,9 +105,7 @@ exports[`Should Main render correctly 1`] = `
           <b
             className="places__found"
           >
-            1
-             places to stay in 
-            Amsterdam
+            1 places to stay in Amsterdam
           </b>
           <form
             action="#"

@@ -6,7 +6,10 @@ import {Main} from "./main.jsx";
 
 const mockStore = configureStore([]);
 
-const city = `Amsterdam`;
+const city = {
+  name: `Amsterdam`,
+  id: 4,
+};
 
 const offers = [
   {

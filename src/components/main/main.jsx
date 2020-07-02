@@ -13,6 +13,49 @@ const Main = (props) => {
     id,
   }));
 
+  const titleText = offers.length
+    ? `${offers.length} places to stay in ${city.name}`
+    : `No places to stay available`;
+
+  const formMarkup = offers.length
+    ? (
+      <form className="places__sorting" action="#" method="get">
+        <span className="places__sorting-caption">Sort by</span>
+        <span className="places__sorting-type" tabIndex={0}>
+          Popular
+          <svg className="places__sorting-arrow" width={7} height={4}>
+            <use xlinkHref="#icon-arrow-select" />
+          </svg>
+        </span>
+        <ul className="places__options places__options--custom places__options--opened">
+          <li
+            className="places__option places__option--active"
+            tabIndex={0}
+          >
+            Popular
+          </li>
+          <li className="places__option" tabIndex={0}>
+            Price: low to high
+          </li>
+          <li className="places__option" tabIndex={0}>
+            Price: high to low
+          </li>
+          <li className="places__option" tabIndex={0}>
+            Top rated first
+          </li>
+        </ul>
+        {/*
+        <select class="places__sorting-type" id="places-sorting">
+          <option class="places__option" value="popular" selected="">Popular</option>
+          <option class="places__option" value="to-high">Price: low to high</option>
+          <option class="places__option" value="to-low">Price: high to low</option>
+          <option class="places__option" value="top-rated">Top rated first</option>
+        </select>
+        */}
+      </form>
+    )
+    : null;
+
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -57,42 +100,9 @@ const Main = (props) => {
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">
-                {offers.length} places to stay in {city}
+                {titleText}
               </b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex={0}>
-                  Popular
-                  <svg className="places__sorting-arrow" width={7} height={4}>
-                    <use xlinkHref="#icon-arrow-select" />
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom places__options--opened">
-                  <li
-                    className="places__option places__option--active"
-                    tabIndex={0}
-                  >
-                    Popular
-                  </li>
-                  <li className="places__option" tabIndex={0}>
-                    Price: low to high
-                  </li>
-                  <li className="places__option" tabIndex={0}>
-                    Price: high to low
-                  </li>
-                  <li className="places__option" tabIndex={0}>
-                    Top rated first
-                  </li>
-                </ul>
-                {/*
-                <select class="places__sorting-type" id="places-sorting">
-                  <option class="places__option" value="popular" selected="">Popular</option>
-                  <option class="places__option" value="to-high">Price: low to high</option>
-                  <option class="places__option" value="to-low">Price: high to low</option>
-                  <option class="places__option" value="top-rated">Top rated first</option>
-                </select>
-                */}
-              </form>
+              {formMarkup}
               <div className="cities__places-list places__list tabs__content">
                 <OffersList
                   offers={offers}
@@ -102,7 +112,7 @@ const Main = (props) => {
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map markers={markers} />
+                {offers.length && <Map markers={markers} />}
               </section>
             </div>
           </div>
@@ -113,7 +123,10 @@ const Main = (props) => {
 };
 
 Main.propTypes = {
-  city: PropTypes.string,
+  city: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
+  }),
   offers: PropTypes.arrayOf(
       PropTypes.shape({
         name: PropTypes.string.isRequired,
@@ -133,12 +146,7 @@ Main.propTypes = {
   onCardTitleClick: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    city: state.city,
-    offers: state.offers,
-  };
-};
+const mapStateToProps = ({city, offers}) => ({city, offers});
 
 export {Main};
 export default connect(mapStateToProps)(Main);

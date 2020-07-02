@@ -1,47 +1,39 @@
 import cities from "./mocks/cities.js";
+import offers from "./mocks/offers.js";
 import {extend} from "./utils.js";
 
 const initialState = {
-  city: cities[0].name,
-  offers: cities[0].offers,
+  city: cities[0],
+  offers: offers.filter((offer) => {
+    return offer.cityIds.includes(cities[0].id);
+  }),
 };
 
 const ActionType = {
-  CHANGE_CITY: `CHANGE_CITY`,
-  GET_OFFERS: `GET_OFFERS`,
+  SET_ACTIVE_CITY: `SET_ACTIVE_CITY`,
 };
 
-const createCityAction = (city) => {
+const setActiveCity = (id) => {
   return {
-    type: ActionType.CHANGE_CITY,
-    payload: city,
-  };
-};
-
-const createOffersAction = (city) => {
-  return {
-    type: ActionType.GET_OFFERS,
-    payload: cities.find((item) => {
-      return item.name === city;
-    }).offers,
+    type: ActionType.SET_ACTIVE_CITY,
+    payload: id,
   };
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.CHANGE_CITY:
+    case ActionType.SET_ACTIVE_CITY:
       return extend(state, {
-        city: action.payload,
-      });
-
-    case ActionType.GET_OFFERS:
-      return extend(state, {
-        offers: action.payload,
+        city: cities.find((city) => {
+          return city.id === action.payload;
+        }),
+        offers: offers.filter((offer) => {
+          return offer.cityIds.includes(action.payload);
+        }),
       });
   }
 
   return state;
 };
 
-
-export {reducer, ActionType, createCityAction, createOffersAction};
+export {reducer, ActionType, setActiveCity};

@@ -12,7 +12,7 @@ const cities = [
 it(`Should CitiesList render correctly`, () => {
   const tree = renderer
     .create(<CitiesList
-      city={`Paris`}
+      city={cities[0]}
       cities={cities}
       createCityAction={() => {}}
       createOffersAction={() => {}}

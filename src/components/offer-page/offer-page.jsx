@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Reviews from "../reviews/reviews.jsx";
 import Map from "../map/map.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
+import clsx from "clsx";
 
 const OfferPage = (props) => {
   const {currentId, offers, onCardTitleClick} = props;
@@ -62,10 +63,6 @@ const OfferPage = (props) => {
 
   const starsQuantity = starsCount <= 5 ? starsCount : 5;
   const raitingPercent = `${Math.round(starsQuantity) * 20}%`;
-
-  const ownerClassName = owner.isSuper
-    ? `property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper`
-    : `property__avatar-wrapper user__avatar-wrapper`;
 
   return (
     <div className="page">
@@ -156,7 +153,8 @@ const OfferPage = (props) => {
               <div className="property__host">
                 <h2 className="property__host-title">Meet the host</h2>
                 <div className="property__host-user user">
-                  <div className={ownerClassName}>
+                  <div
+                    className={clsx(`property__avatar-wrapper`, (owner.isSuper) && `property__avatar-wrapper--pro`, `user__avatar-wrapper`)}>
                     <img
                       className="property__avatar user__avatar"
                       src={owner.url}
@@ -219,11 +217,7 @@ OfferPage.propTypes = {
   onCardTitleClick: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    offers: state.offers,
-  };
-};
+const mapStateToProps = ({offers}) => ({offers});
 
 export {OfferPage};
 export default connect(mapStateToProps)(OfferPage);

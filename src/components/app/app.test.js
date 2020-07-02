@@ -6,6 +6,11 @@ import App from "./app.jsx";
 
 const mockStore = configureStore([]);
 
+const city = {
+  name: `Amsterdam`,
+  id: 4,
+};
+
 const cities = [
   {
     name: `Amsterdam`,
@@ -70,7 +75,7 @@ const offers = [
 
 it(`Render App`, () => {
   const store = mockStore({
-    city: `Paris`,
+    city,
     offers,
   });
 
