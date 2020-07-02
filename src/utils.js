@@ -8,3 +8,7 @@ export const dateToFormatString = (date) =>
 export const sortByDate = (array) => {
   return array.slice().sort((a, b) => (b.date) - (a.date));
 };
+
+export const extend = (a, b) => {
+  return Object.assign({}, a, b);
+};

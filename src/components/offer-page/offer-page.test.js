@@ -1,6 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import OfferPage from "./offer-page.jsx";
+import {OfferPage} from "./offer-page.jsx";
 
 const offers = [
   {

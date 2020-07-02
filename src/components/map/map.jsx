@@ -7,7 +7,6 @@ class Map extends PureComponent {
     super(props);
 
     this._mapRef = React.createRef();
-    // this._markers = [];
   }
 
   render() {
@@ -49,7 +48,7 @@ class Map extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.activeMarker !== prevProps.activeMarker) {
+    if (this.props.activeMarker !== prevProps.activeMarker || this.props.markers !== prevProps.markers) {
       this._map.removeLayer(this._layer);
       this._addMarkers();
     }

@@ -25,7 +25,6 @@ class App extends PureComponent {
           <Route exact path="/dev-offer">
             <OfferPage
               currentId={1}
-              offers={this.props.offers}
               onCardTitleClick={this._handleCardTitleClick}
             />
           </Route>
@@ -41,15 +40,13 @@ class App extends PureComponent {
       return (
         <OfferPage
           currentId={currentId}
-          offers={this.props.offers}
           onCardTitleClick={this._handleCardTitleClick}
         />
       );
     } else {
       return (
         <Main
-          offersCount={this.props.offersCount}
-          offers={this.props.offers}
+          cities={this.props.cities}
           onCardTitleClick={this._handleCardTitleClick}
         />
       );
@@ -64,29 +61,10 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  offersCount: PropTypes.number.isRequired,
-  offers: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        descriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
-        advantages: PropTypes.arrayOf(PropTypes.string).isRequired,
-        owner: PropTypes.shape({
-          url: PropTypes.string.isRequired,
-          name: PropTypes.string.isRequired,
-          isSuper: PropTypes.bool.isRequired,
-        }).isRequired,
-        type: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
-        url: PropTypes.string.isRequired,
-        urls: PropTypes.arrayOf(PropTypes.string).isRequired,
-        starsCount: PropTypes.number.isRequired,
-        bedroomsCount: PropTypes.number.isRequired,
-        guestsCount: PropTypes.number.isRequired,
-        isPremium: PropTypes.bool.isRequired,
-        coordinates: PropTypes.arrayOf(PropTypes.number),
-        id: PropTypes.number.isRequired,
-      })
-  ).isRequired,
+  cities: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    id: PropTypes.number,
+  })).isRequired,
 };
 
 export default App;

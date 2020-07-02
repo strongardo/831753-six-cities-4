@@ -1,4 +1,17 @@
-export default [
+import {reducer, ActionType} from "./reducer.js";
+
+const cities = [
+  {
+    name: `Paris`,
+    id: 1,
+  },
+  {
+    name: `Cologne`,
+    id: 2,
+  },
+];
+
+const offers = [
   {
     name: `Wood and stone place`,
     descriptions: [
@@ -215,3 +228,26 @@ export default [
     id: 4,
   },
 ];
+
+
+describe(`reducer tests`, () => {
+  it(`Reducer without additional parameters should return initial state`, () => {
+    expect(reducer(void 0, {})).toEqual({
+      city: cities[0],
+      offers: [offers[0], offers[2], offers[3]],
+    });
+  });
+
+  it(`Reducer should set the city to a given value`, () => {
+    expect(reducer({
+      city: cities[0],
+      offers: [offers[0], offers[2], offers[3]],
+    }, {
+      type: ActionType.SET_ACTIVE_CITY,
+      payload: 2,
+    })).toEqual({
+      city: cities[1],
+      offers: [offers[1], offers[3]],
+    });
+  });
+});
