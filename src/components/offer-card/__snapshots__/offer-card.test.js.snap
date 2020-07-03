@@ -3,6 +3,7 @@
 exports[`Should OfferCard render correctly 1`] = `
 <article
   className="cities__place-card place-card"
+  onMouseOut={[Function]}
   onMouseOver={[Function]}
 >
   <div
