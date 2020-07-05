@@ -14,8 +14,7 @@ it(`Should CitiesList render correctly`, () => {
     .create(<CitiesList
       city={cities[0]}
       cities={cities}
-      createCityAction={() => {}}
-      createOffersAction={() => {}}
+      setActiveCity={() => {}}
     />)
     .toJSON();
 

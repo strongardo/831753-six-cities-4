@@ -61,7 +61,9 @@ it(`Should OffersList render correctly`, () => {
   const tree = renderer
     .create(<OffersList
       offers={offers}
+      sortType={`Popular`}
       onCardTitleClick={() => {}}
+      onCardHover={() => {}}
     />)
     .toJSON();
 

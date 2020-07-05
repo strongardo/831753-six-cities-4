@@ -5,6 +5,7 @@ import Reviews from "../reviews/reviews.jsx";
 import Map from "../map/map.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
 import clsx from "clsx";
+import {SortType} from "../../const.js";
 
 const OfferPage = (props) => {
   const {currentId, offers, onCardTitleClick} = props;
@@ -182,6 +183,7 @@ const OfferPage = (props) => {
             <div className="near-places__list places__list">
               <OffersList
                 offers={nearestOffers}
+                sortType={SortType.POPULAR}
                 onCardTitleClick={onCardTitleClick}
               />
             </div>
