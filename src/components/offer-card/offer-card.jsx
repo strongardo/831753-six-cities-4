@@ -5,9 +5,15 @@ const OfferCard = (props) => {
   const {offer, onCardHover, onCardTitleClick} = props;
   const {name, type, price, url, starsCount, isPremium, id} = offer;
 
-  const handleHover = () => {
+  const handleCardMouseOver = () => {
     if (onCardHover) {
       onCardHover(id);
+    }
+  };
+
+  const handleCardMouseOut = () => {
+    if (onCardHover) {
+      onCardHover();
     }
   };
 
@@ -26,7 +32,10 @@ const OfferCard = (props) => {
   const raitingPercent = `${starsCount * 20}%`;
 
   return (
-    <article className="cities__place-card place-card" onMouseOver={handleHover} onMouseOut={handleHover}>
+    <article
+      className="cities__place-card place-card"
+      onMouseOver={handleCardMouseOver}
+      onMouseOut={handleCardMouseOut}>
       {premiumMarkup}
       <div className="cities__image-wrapper place-card__image-wrapper">
         <a href="#">

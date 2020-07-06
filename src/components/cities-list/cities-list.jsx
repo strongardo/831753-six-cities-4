@@ -1,14 +1,19 @@
 import React from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {setActiveCity} from "../../reducer.js";
+import {setActiveCity} from "../../reducer/reducer.js";
 import PropTypes from "prop-types";
 import clsx from "clsx";
+import {sortOffersByType} from "../../utils.js";
 
 const CitiesList = (props) => {
 
   const handleCityClick = (city) => {
-    props.setActiveCity(city.id);
+    const filteredOffers = props.serverOffers.filter((offer) => {
+      return offer.cityIds.includes(city.id);
+    });
+    const offers = sortOffersByType(filteredOffers, props.sortType);
+    props.setActiveCity(city, offers);
   };
 
   const citiesMarkup = props.cities.map((city) => {
@@ -33,6 +38,18 @@ const CitiesList = (props) => {
 };
 
 CitiesList.propTypes = {
+  offers: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        url: PropTypes.string.isRequired,
+        starsCount: PropTypes.number.isRequired,
+        isPremium: PropTypes.bool.isRequired,
+        coordinates: PropTypes.arrayOf(PropTypes.number),
+        id: PropTypes.number.isRequired,
+      })
+  ).isRequired,
   city: PropTypes.shape({
     name: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
@@ -42,11 +59,26 @@ CitiesList.propTypes = {
     id: PropTypes.number,
   })).isRequired,
   setActiveCity: PropTypes.func.isRequired,
+  sortType: PropTypes.string,
+  serverOffers: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        url: PropTypes.string.isRequired,
+        starsCount: PropTypes.number.isRequired,
+        isPremium: PropTypes.bool.isRequired,
+        coordinates: PropTypes.arrayOf(PropTypes.number),
+        id: PropTypes.number.isRequired,
+      })
+  ).isRequired,
 };
+
+const mapStateToProps = ({city, offers, sortType, serverOffers}) => ({city, offers, sortType, serverOffers});
 
 const matchDispatchToProps = (dispatch) => {
   return bindActionCreators({setActiveCity}, dispatch);
 };
 
 export {CitiesList};
-export default connect(null, matchDispatchToProps)(CitiesList);
+export default connect(mapStateToProps, matchDispatchToProps)(CitiesList);
