@@ -5,7 +5,7 @@ import CitiesList from "../cities-list/cities-list.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
 import Map from "../map/map.jsx";
 import Sort from "../sort/sort.jsx";
-import {withActiveId} from "../with-active-id/with-active-id.jsx";
+import {withActiveId} from "../../hocs/with-active-id/with-active-id.jsx";
 
 const Main = (props) => {
 

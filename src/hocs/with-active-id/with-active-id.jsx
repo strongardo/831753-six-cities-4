@@ -1,7 +1,7 @@
 import React, {PureComponent} from "react";
 
 export const withActiveId = (Component) => {
-  return class WithActiveFlagComponent extends PureComponent {
+  return class WithActiveIdComponent extends PureComponent {
     constructor(props) {
       super(props);
 

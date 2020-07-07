@@ -2,22 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
 import {setSortType} from "../../reducer/reducer.js";
 import {SortType} from "../../const.js";
 import {sortOffersByType} from "../../utils.js";
-import {withActiveFlag} from "../with-active-flag/with-active-flag.jsx";
+import {withActiveFlag} from "../../hocs/with-active-flag/with-active-flag.jsx";
 
 const Sort = (props) => {
 
   const sortTypes = Object.values(SortType);
-
-  const handleLiClick = (type) => {
-    if (props.sortType !== type) {
-      const offers = sortOffersByType(props.offers, type);
-      props.setSortType(type, offers);
-    }
-  };
 
   return (
     <form className="places__sorting" action="#" method="get">
@@ -35,7 +27,7 @@ const Sort = (props) => {
               key={type}
               className={clsx(`places__option`, (props.sortType === type) && `places__option--active`)}
               onClick={() => {
-                handleLiClick(type);
+                props.onLiClick(type, props.sortType, props.offers);
               }}
               tabIndex={0}>
               {type}
@@ -56,7 +48,6 @@ const Sort = (props) => {
 };
 
 Sort.propTypes = {
-  setSortType: PropTypes.func.isRequired,
   sortType: PropTypes.string.isRequired,
   onActiveChange: PropTypes.func.isRequired,
   isActive: PropTypes.bool.isRequired,
@@ -72,13 +63,19 @@ Sort.propTypes = {
         id: PropTypes.number.isRequired,
       })
   ).isRequired,
+  onLiClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({sortType, offers}) => ({sortType, offers});
 
-const matchDispatchToProps = (dispatch) => {
-  return bindActionCreators({setSortType}, dispatch);
-};
+const matchDispatchToProps = (dispatch) => ({
+  onLiClick(type, sortType, propsOffers) {
+    if (sortType !== type) {
+      const offers = sortOffersByType(propsOffers, type);
+      dispatch(setSortType(type, offers));
+    }
+  },
+});
 
 export {Sort};
 export default withActiveFlag(connect(mapStateToProps, matchDispatchToProps)(Sort));
