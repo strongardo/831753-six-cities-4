@@ -1,11 +1,11 @@
 import React from "react";
+import clsx from "clsx";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
+import {SortType} from "../../const.js";
 import Reviews from "../reviews/reviews.jsx";
 import Map from "../map/map.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
-import clsx from "clsx";
-import {SortType} from "../../const.js";
 
 const OfferPage = (props) => {
   const {currentId, offers, onCardTitleClick} = props;

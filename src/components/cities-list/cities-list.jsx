@@ -1,22 +1,18 @@
 import React from "react";
 import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
-import {setActiveCity} from "../../reducer.js";
+import {setActiveCity} from "../../reducer/reducer.js";
 import PropTypes from "prop-types";
 import clsx from "clsx";
+import {sortOffersByType} from "../../utils.js";
 
 const CitiesList = (props) => {
-
-  const handleCityClick = (city) => {
-    props.setActiveCity(city.id);
-  };
 
   const citiesMarkup = props.cities.map((city) => {
     return (
       <li key={city.id} className="locations__item">
         <a
           className={clsx(`locations__item-link tabs__item`, (props.city.id === city.id) && `tabs__item--active`)}
-          onClick={() => handleCityClick(city)}>
+          onClick={() => props.onCityClick(city, props.serverOffers, props.sortType)}>
           <span>{city.name}</span>
         </a>
       </li>
@@ -33,6 +29,18 @@ const CitiesList = (props) => {
 };
 
 CitiesList.propTypes = {
+  offers: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        url: PropTypes.string.isRequired,
+        starsCount: PropTypes.number.isRequired,
+        isPremium: PropTypes.bool.isRequired,
+        coordinates: PropTypes.arrayOf(PropTypes.number),
+        id: PropTypes.number.isRequired,
+      })
+  ).isRequired,
   city: PropTypes.shape({
     name: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
@@ -41,12 +49,33 @@ CitiesList.propTypes = {
     name: PropTypes.string,
     id: PropTypes.number,
   })).isRequired,
-  setActiveCity: PropTypes.func.isRequired,
+  sortType: PropTypes.string,
+  serverOffers: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        url: PropTypes.string.isRequired,
+        starsCount: PropTypes.number.isRequired,
+        isPremium: PropTypes.bool.isRequired,
+        coordinates: PropTypes.arrayOf(PropTypes.number),
+        id: PropTypes.number.isRequired,
+      })
+  ).isRequired,
+  onCityClick: PropTypes.func.isRequired,
 };
 
-const matchDispatchToProps = (dispatch) => {
-  return bindActionCreators({setActiveCity}, dispatch);
-};
+const mapStateToProps = ({city, offers, sortType, serverOffers}) => ({city, offers, sortType, serverOffers});
+
+const matchDispatchToProps = (dispatch) => ({
+  onCityClick(city, serverOffers, sortType) {
+    const filteredOffers = serverOffers.filter((offer) => {
+      return offer.cityIds.includes(city.id);
+    });
+    const offers = sortOffersByType(filteredOffers, sortType);
+    dispatch(setActiveCity(city, offers));
+  },
+});
 
 export {CitiesList};
-export default connect(null, matchDispatchToProps)(CitiesList);
+export default connect(mapStateToProps, matchDispatchToProps)(CitiesList);
