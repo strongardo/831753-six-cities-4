@@ -1,9 +1,11 @@
 import React from "react";
 import {connect} from "react-redux";
-import {setActiveCity} from "../../reducer/reducer.js";
+import {setActiveCity, setOffers} from "../../reducer/condition/condition.js";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import {sortOffersByType} from "../../utils.js";
+import {getCity, getCities, getOffers, getSortType} from "../../reducer/condition/selectors.js";
+import {getServerOffers} from "../../reducer/data/selectors.js";
 
 const CitiesList = (props) => {
 
@@ -45,10 +47,12 @@ CitiesList.propTypes = {
     name: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
   }),
-  cities: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string,
-    id: PropTypes.number,
-  })).isRequired,
+  cities: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+      })
+  ).isRequired,
   sortType: PropTypes.string,
   serverOffers: PropTypes.arrayOf(
       PropTypes.shape({
@@ -65,15 +69,24 @@ CitiesList.propTypes = {
   onCityClick: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({city, offers, sortType, serverOffers}) => ({city, offers, sortType, serverOffers});
+const mapStateToProps = (state) => {
+  return {
+    city: getCity(state),
+    cities: getCities(state),
+    offers: getOffers(state),
+    sortType: getSortType(state),
+    serverOffers: getServerOffers(state),
+  };
+};
 
 const matchDispatchToProps = (dispatch) => ({
   onCityClick(city, serverOffers, sortType) {
     const filteredOffers = serverOffers.filter((offer) => {
-      return offer.cityIds.includes(city.id);
+      return offer.city.name === city.name;
     });
     const offers = sortOffersByType(filteredOffers, sortType);
-    dispatch(setActiveCity(city, offers));
+    dispatch(setActiveCity(city));
+    dispatch(setOffers(offers));
   },
 });
 

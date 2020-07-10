@@ -8,10 +8,10 @@ import Map from "../map/map.jsx";
 import Sort from "../sort/sort.jsx";
 import EmptyCitiesContainer from "../empty-cities-container/empty-cities-container.jsx";
 import {withActiveId} from "../../hocs/with-active-id/with-active-id.jsx";
+import {getCity, getOffers} from "../../reducer/condition/selectors.js";
 
 const Main = (props) => {
-
-  const {cities, onCardTitleClick, city, offers, activeCardId, onActiveCardIdChange} = props;
+  const {onCardTitleClick, city, offers, activeCardId, onActiveCardIdChange} = props;
 
   const markers = offers.map(({coordinates, id}) => ({
     coordinates,
@@ -36,13 +36,19 @@ const Main = (props) => {
       </section>
       <div className="cities__right-section">
         <section className="cities__map map">
-          {(offers.length) ? <Map markers={markers} activeMarker={activeCardId} /> : null}
+          {(offers.length) ?
+            <Map
+              city={city}
+              markers={markers}
+              activeMarker={activeCardId}
+            />
+            : null}
         </section>
       </div>
     </div>)
     : <EmptyCitiesContainer city={city.name}/>;
 
-  return (
+  const markup = (
     <div className="page page--gray page--main">
       <header className="header">
         <div className="container">
@@ -79,7 +85,7 @@ const Main = (props) => {
       <main className={clsx(`page__main page__main--index`, !offers.length && `page__main--index-empty`)}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
-          <CitiesList cities={cities} />
+          <CitiesList />
         </div>
         <div className="cities">
           {citiesContainerMarkup}
@@ -87,12 +93,15 @@ const Main = (props) => {
       </main>
     </div>
   );
+
+  return markup;
 };
 
 Main.propTypes = {
   city: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    id: PropTypes.number.isRequired,
+    coordinates: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+    zoom: PropTypes.number.isRequired,
   }),
   offers: PropTypes.arrayOf(
       PropTypes.shape({
@@ -106,16 +115,17 @@ Main.propTypes = {
         id: PropTypes.number.isRequired,
       })
   ).isRequired,
-  cities: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string,
-    id: PropTypes.number,
-  })).isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
   activeCardId: PropTypes.number.isRequired,
   onActiveCardIdChange: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({city, offers}) => ({city, offers});
+const mapStateToProps = (state) => {
+  return {
+    city: getCity(state),
+    offers: getOffers(state),
+  };
+};
 
 export {Main};
 export default withActiveId(connect(mapStateToProps)(Main));

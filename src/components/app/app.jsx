@@ -1,8 +1,11 @@
 import React, {PureComponent} from "react";
+import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {Switch, Route, BrowserRouter} from "react-router-dom";
 import Main from "../main/main.jsx";
 import OfferPage from "../offer-page/offer-page.jsx";
+import NoDataContainer from "../no-data-container/no-data-container.jsx";
+import {getIsDataLoaded} from "../../reducer/data/selectors.js";
 
 class App extends PureComponent {
   constructor(props) {
@@ -16,21 +19,25 @@ class App extends PureComponent {
   }
 
   render() {
-    return (
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/">
-            {this._renderPage()}
-          </Route>
-          <Route exact path="/dev-offer">
-            <OfferPage
-              currentId={1}
-              onCardTitleClick={this._handleCardTitleClick}
-            />
-          </Route>
-        </Switch>
-      </BrowserRouter>
-    );
+    if (this.props.isDataLoaded) {
+      return (
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/">
+              {this._renderPage()}
+            </Route>
+            <Route exact path="/dev-offer">
+              <OfferPage
+                currentId={1}
+                onCardTitleClick={this._handleCardTitleClick}
+              />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      );
+    } else {
+      return <NoDataContainer />;
+    }
   }
 
   _renderPage() {
@@ -46,7 +53,6 @@ class App extends PureComponent {
     } else {
       return (
         <Main
-          cities={this.props.cities}
           onCardTitleClick={this._handleCardTitleClick}
         />
       );
@@ -61,10 +67,14 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  cities: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string,
-    id: PropTypes.number,
-  })).isRequired,
+  isDataLoaded: PropTypes.bool.isRequired,
 };
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    isDataLoaded: getIsDataLoaded(state),
+  };
+};
+
+export {App};
+export default connect(mapStateToProps)(App);
