@@ -3,7 +3,7 @@ import adaptOffers from "../../adapters/offers.js";
 import {setActiveCity} from "../condition/condition.js";
 import {setOffers} from "../condition/condition.js";
 import {setCities} from "../condition/condition.js";
-import {getSortedOffers} from "../condition/selectors.js";
+import {getSortedOffers, getNonRepeatingCities} from "../condition/selectors.js";
 
 const initialState = {
   serverOffers: null,
@@ -34,27 +34,12 @@ const serverOffersOperation = () => (dispatch, getState, api) => {
   return api.get(`/hotels`)
     .then((response) => {
       const serverOffers = adaptOffers(response.data);
-
       dispatch(setServerOffers(serverOffers));
 
-      const serverCities = serverOffers.map((offer) => {
-        return offer.city;
-      });
+      const nonRepeatingCities = getNonRepeatingCities(getState());
+      dispatch(setCities(nonRepeatingCities));
 
-      const cities = [serverCities[0]];
-      const doesCityExist = (city) => {
-        return cities.some((item) => {
-          return item.name === city.name;
-        });
-      };
-      serverCities.forEach((city) => {
-        if (!doesCityExist(city)) {
-          cities.push(city);
-        }
-      });
-      dispatch(setCities(cities));
-
-      const activeCity = cities[0];
+      const activeCity = nonRepeatingCities[0];
       dispatch(setActiveCity(activeCity));
 
       const sortedOffers = getSortedOffers(getState());
