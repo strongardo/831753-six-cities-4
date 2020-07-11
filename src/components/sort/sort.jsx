@@ -2,10 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import {connect} from "react-redux";
-import {setSortType} from "../../reducer/reducer.js";
+import {setSortType, setOffers} from "../../reducer/condition/condition.js";
 import {SortType} from "../../const.js";
 import {sortOffersByType} from "../../utils.js";
 import {withActiveFlag} from "../../hocs/with-active-flag/with-active-flag.jsx";
+import {getSortType, getOffers} from "../../reducer/condition/selectors.js";
 
 const Sort = (props) => {
 
@@ -66,13 +67,19 @@ Sort.propTypes = {
   onLiClick: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({sortType, offers}) => ({sortType, offers});
+const mapStateToProps = (state) => {
+  return {
+    sortType: getSortType(state),
+    offers: getOffers(state),
+  };
+};
 
 const matchDispatchToProps = (dispatch) => ({
   onLiClick(type, sortType, propsOffers) {
     if (sortType !== type) {
       const offers = sortOffersByType(propsOffers, type);
-      dispatch(setSortType(type, offers));
+      dispatch(setSortType(type));
+      dispatch(setOffers(offers));
     }
   },
 });

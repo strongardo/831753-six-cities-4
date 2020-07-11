@@ -14,16 +14,12 @@ class Map extends PureComponent {
   }
 
   componentDidMount() {
-    const city = [52.38333, 4.9];
-
-    const zoom = 12;
     this._map = leaflet.map(this._mapRef.current, {
-      center: city,
-      zoom,
+      center: this.props.city.coordinates,
+      zoom: this.props.city.zoom,
       zoomControl: false,
       marker: true,
     });
-    this._map.setView(city, zoom);
 
     this._icon = leaflet.icon({
       iconUrl: `img/pin.svg`,
@@ -49,7 +45,7 @@ class Map extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (this.props.activeMarker !== prevProps.activeMarker || this.props.markers !== prevProps.markers) {
-      this._map.removeLayer(this._layer);
+      this._map.setView(this.props.city.coordinates, this.props.city.zoom);
       this._addMarkers();
     }
   }
@@ -70,6 +66,10 @@ class Map extends PureComponent {
 }
 
 Map.propTypes = {
+  city: PropTypes.shape({
+    coordinates: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+    zoom: PropTypes.number.isRequired,
+  }),
   markers: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,

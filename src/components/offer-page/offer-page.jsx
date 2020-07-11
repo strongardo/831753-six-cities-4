@@ -6,9 +6,10 @@ import {SortType} from "../../const.js";
 import Reviews from "../reviews/reviews.jsx";
 import Map from "../map/map.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
+import {getOffers, getCity} from "../../reducer/condition/selectors.js";
 
 const OfferPage = (props) => {
-  const {currentId, offers, onCardTitleClick} = props;
+  const {currentId, offers, onCardTitleClick, city} = props;
   const currentOffer = offers.find((offer) => offer.id === currentId);
   const nearestOffers = offers.filter((offer) => offer.id !== currentId);
 
@@ -32,7 +33,7 @@ const OfferPage = (props) => {
     coordinates,
   }));
 
-  const photosMarkup = urls.map((photoUrl) => {
+  const photosMarkup = urls.slice(0, 6).map((photoUrl) => {
     return (
       <div className="property__image-wrapper" key={photoUrl}>
         <img className="property__image" src={photoUrl} alt="Photo studio" />
@@ -172,7 +173,11 @@ const OfferPage = (props) => {
             </div>
           </div>
           <section className="property__map map">
-            <Map markers={markers} activeMarker={currentId} />
+            <Map
+              markers={markers}
+              activeMarker={currentId}
+              city={city}
+            />
           </section>
         </section>
         <div className="container">
@@ -195,6 +200,11 @@ const OfferPage = (props) => {
 };
 
 OfferPage.propTypes = {
+  city: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    coordinates: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+    zoom: PropTypes.number.isRequired,
+  }),
   offers: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     descriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -219,7 +229,12 @@ OfferPage.propTypes = {
   onCardTitleClick: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({offers}) => ({offers});
+const mapStateToProps = (state) => {
+  return {
+    offers: getOffers(state),
+    city: getCity(state),
+  };
+};
 
 export {OfferPage};
 export default connect(mapStateToProps)(OfferPage);
