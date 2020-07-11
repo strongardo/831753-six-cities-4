@@ -22,6 +22,7 @@ export const getOffers = (state) => {
   return state[NAME_SPACE].offers;
 };
 
+// этот реселектор используется в реселекторе getSortedOffers
 export const getFilteredOffers = createSelector(
     getCity,
     getServerOffers,
@@ -32,33 +33,11 @@ export const getFilteredOffers = createSelector(
     }
 );
 
+// этот реселектор достает сортированные офферы из стора
 export const getSortedOffers = createSelector(
     getSortType,
     getFilteredOffers,
     (sortType, filteredOffers) => {
       return sortOffersByType(filteredOffers, sortType);
-    }
-);
-
-export const getNonRepeatingCities = createSelector(
-    getServerOffers,
-    (serverOffers) => {
-      const serverCities = serverOffers.map((offer) => {
-        return offer.city;
-      });
-
-      const nonRepeatingCities = [serverCities[0]];
-      const doesCityExist = (city) => {
-        return nonRepeatingCities.some((item) => {
-          return item.name === city.name;
-        });
-      };
-      serverCities.forEach((city) => {
-        if (!doesCityExist(city)) {
-          nonRepeatingCities.push(city);
-        }
-      });
-
-      return nonRepeatingCities;
     }
 );

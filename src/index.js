@@ -7,7 +7,7 @@ import thunk from "redux-thunk";
 import reducer from "./reducer/reducer.js";
 import App from "./components/app/app.jsx";
 import {createAPI} from "./api.js";
-import {serverOffersOperation} from "./reducer/data/data.js";
+import {getOffersAsync} from "./reducer/data/data.js";
 
 const api = createAPI();
 
@@ -17,7 +17,7 @@ const store = createStore(reducer,
     )
 );
 
-store.dispatch(serverOffersOperation());
+store.dispatch(getOffersAsync());
 
 ReactDOM.render(
     <Provider store={store}>

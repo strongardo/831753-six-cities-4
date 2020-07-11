@@ -69,6 +69,8 @@ CitiesList.propTypes = {
   onCityClick: PropTypes.func.isRequired,
 };
 
+// достаю из стора нужные данные с помощью селекторов.
+// вот тут селекторы можно использовать, так как есть доступ к стор(state)
 const mapStateToProps = (state) => {
   return {
     city: getCity(state),
@@ -79,6 +81,7 @@ const mapStateToProps = (state) => {
   };
 };
 
+// а тут не получается воспользоваться селекторами, а хотелось сделать getSortedOffers
 const matchDispatchToProps = (dispatch) => ({
   onCityClick(city, serverOffers, sortType) {
     const filteredOffers = serverOffers.filter((offer) => {
