@@ -42,19 +42,16 @@ const getOffersAsync = () => (dispatch, getState, api) => {
             return acc;
           }
           , {});
-      // приложение работает с массивом городов, поэтому превращаю объект в массив
-      const cities = [...Object.values(nonRepeatingCities)];
+
+      const cities = Object.values(nonRepeatingCities);
       dispatch(setCities(cities));
 
       const activeCity = cities[0];
       dispatch(setActiveCity(activeCity));
 
-      // с помощью реселектора достаю отсортированные офферы
-      // реселектор нужен, чтобы вынести код по фильтрации и сортировке из getOffersAsync
       const sortedOffers = getSortedOffers(getState());
       dispatch(setOffers(sortedOffers));
 
-      // когда все необходимое попало в стор, меняю флаг isDataLoaded, чтобы отрисовать компоненты
       dispatch(setIsDataLoaded(true));
     });
 };
@@ -74,4 +71,4 @@ const reducer = (state = initialState, action) => {
   return state;
 };
 
-export {reducer, ActionType, getOffersAsync};
+export {reducer, getOffersAsync};

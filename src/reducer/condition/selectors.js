@@ -22,7 +22,6 @@ export const getOffers = (state) => {
   return state[NAME_SPACE].offers;
 };
 
-// этот реселектор используется в реселекторе getSortedOffers
 export const getFilteredOffers = createSelector(
     getCity,
     getServerOffers,
@@ -33,7 +32,6 @@ export const getFilteredOffers = createSelector(
     }
 );
 
-// этот реселектор достает сортированные офферы из стора
 export const getSortedOffers = createSelector(
     getSortType,
     getFilteredOffers,

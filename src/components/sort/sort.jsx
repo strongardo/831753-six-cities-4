@@ -74,7 +74,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const matchDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   onLiClick(type, sortType, propsOffers) {
     if (sortType !== type) {
       const offers = sortOffersByType(propsOffers, type);
@@ -85,4 +85,4 @@ const matchDispatchToProps = (dispatch) => ({
 });
 
 export {Sort};
-export default withActiveFlag(connect(mapStateToProps, matchDispatchToProps)(Sort));
+export default withActiveFlag(connect(mapStateToProps, mapDispatchToProps)(Sort));

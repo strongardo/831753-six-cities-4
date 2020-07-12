@@ -5,6 +5,7 @@ import {Switch, Route, BrowserRouter} from "react-router-dom";
 import Main from "../main/main.jsx";
 import OfferPage from "../offer-page/offer-page.jsx";
 import NoDataContainer from "../no-data-container/no-data-container.jsx";
+import Login from "../login/login.jsx";
 import {getIsDataLoaded} from "../../reducer/data/selectors.js";
 
 class App extends PureComponent {
@@ -31,6 +32,9 @@ class App extends PureComponent {
                 currentId={1}
                 onCardTitleClick={this._handleCardTitleClick}
               />
+            </Route>
+            <Route exact path="/dev-login">
+              <Login />
             </Route>
           </Switch>
         </BrowserRouter>

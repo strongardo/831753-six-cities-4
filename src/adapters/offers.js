@@ -1,5 +1,5 @@
 const adaptOffers = (serverOffers) => {
-  return serverOffers.map((offer, index) => {
+  return serverOffers.map((offer) => {
     return {
       name: offer.title,
       descriptions: [offer.description],
@@ -22,7 +22,7 @@ const adaptOffers = (serverOffers) => {
         name: offer.city.name,
         coordinates: [offer.city.location.latitude, offer.city.location.longitude],
         zoom: offer.city.location.zoom,
-        id: index + 1,
+        id: offer.city.name,
       },
       id: offer.id,
       reviews: [

@@ -7,9 +7,11 @@ import Reviews from "../reviews/reviews.jsx";
 import Map from "../map/map.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
 import {getOffers, getCity} from "../../reducer/condition/selectors.js";
+import {getUserStatus, getUserData} from "../../reducer/user/selectors.js";
+import {UserStatus} from "../../const.js";
 
 const OfferPage = (props) => {
-  const {currentId, offers, onCardTitleClick, city} = props;
+  const {currentId, offers, onCardTitleClick, city, userStatus, userData} = props;
   const currentOffer = offers.find((offer) => offer.id === currentId);
   const nearestOffers = offers.filter((offer) => offer.id !== currentId);
 
@@ -91,7 +93,7 @@ const OfferPage = (props) => {
                   >
                     <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                     <span className="header__user-name user__name">
-                      Oliver.conner@gmail.com
+                      {(userStatus === UserStatus.NO_AUTH) ? `Sign In` : userData.email}
                     </span>
                   </a>
                 </li>
@@ -169,7 +171,7 @@ const OfferPage = (props) => {
                 </div>
                 <div className="property__description">{descriptionMarkup}</div>
               </div>
-              <Reviews reviews={reviews} />
+              <Reviews reviews={reviews} userStatus={userStatus} />
             </div>
           </div>
           <section className="property__map map">
@@ -225,6 +227,13 @@ OfferPage.propTypes = {
     coordinates: PropTypes.arrayOf(PropTypes.number),
     id: PropTypes.number.isRequired,
   })).isRequired,
+  userStatus: PropTypes.string.isRequired,
+  userData: PropTypes.shape({
+    avatarUrl: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    isPro: PropTypes.bool.isRequired,
+    name: PropTypes.string.isRequired,
+  }),
   currentId: PropTypes.number.isRequired,
   onCardTitleClick: PropTypes.func.isRequired,
 };
@@ -233,6 +242,8 @@ const mapStateToProps = (state) => {
   return {
     offers: getOffers(state),
     city: getCity(state),
+    userStatus: getUserStatus(state),
+    userData: getUserData(state),
   };
 };
 
