@@ -65,4 +65,4 @@ const reducer = (state = initialState, action) => {
   return state;
 };
 
-export {reducer, ActionType, setActiveCity, setCities, setSortType, setOffers};
+export {reducer, setActiveCity, setCities, setSortType, setOffers};
