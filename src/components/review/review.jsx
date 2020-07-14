@@ -5,7 +5,7 @@ import {dateToFormatString} from "../../utils.js";
 const Review = (props) => {
   const {review} = props;
   const raitingPercent = `${review.starsCount * 20}%`;
-  const date = dateToFormatString(review.date);
+  const date = dateToFormatString(new Date(review.date));
 
   return (
     <li className="reviews__item">
@@ -29,7 +29,7 @@ const Review = (props) => {
           </div>
         </div>
         <p className="reviews__text">{review.text}</p>
-        <time className="reviews__time" dateTime="2019-04-24">
+        <time className="reviews__time">
           {date}
         </time>
       </div>
@@ -43,7 +43,7 @@ Review.propTypes = {
     starsCount: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    date: PropTypes.object.isRequired,
+    date: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
   }).isRequired,
 };

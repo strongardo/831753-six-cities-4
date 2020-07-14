@@ -1,6 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import Reviews from "./reviews.jsx";
+import ReviewsList from "../reviews-list/reviews-list.jsx";
 
 const reviews = [
   {
@@ -17,7 +17,7 @@ const reviews = [
 
 it(`Should Reviews render correctly`, () => {
   const tree = renderer
-    .create(<Reviews reviews={reviews} />)
+    .create(<ReviewsList reviews={reviews} />)
     .toJSON();
 
   expect(tree).toMatchSnapshot();
