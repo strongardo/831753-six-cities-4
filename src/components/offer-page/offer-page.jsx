@@ -3,7 +3,8 @@ import clsx from "clsx";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {SortType} from "../../const.js";
-import Reviews from "../reviews/reviews.jsx";
+import ReviewsList from "../reviews-list/reviews-list.jsx";
+import ReviewsForm from "../reviews-form/reviews-form.jsx";
 import Map from "../map/map.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
 import {getOffers, getCity} from "../../reducer/condition/selectors.js";
@@ -171,7 +172,10 @@ const OfferPage = (props) => {
                 </div>
                 <div className="property__description">{descriptionMarkup}</div>
               </div>
-              <Reviews reviews={reviews} userStatus={userStatus} />
+              <section className="property__reviews reviews">
+                <ReviewsList id={currentId} reviews={reviews} />
+                {(userStatus === UserStatus.AUTH) ? <ReviewsForm id={currentId}/> : null}
+              </section>
             </div>
           </div>
           <section className="property__map map">
@@ -223,7 +227,6 @@ OfferPage.propTypes = {
     bedroomsCount: PropTypes.number.isRequired,
     guestsCount: PropTypes.number.isRequired,
     isPremium: PropTypes.bool.isRequired,
-    reviews: PropTypes.arrayOf(PropTypes.object).isRequired,
     coordinates: PropTypes.arrayOf(PropTypes.number),
     id: PropTypes.number.isRequired,
   })).isRequired,

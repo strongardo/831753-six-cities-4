@@ -1,8 +1,9 @@
 import {extend} from "../../utils.js";
 import adaptOffers from "../../adapters/offers.js";
-import {setActiveCity} from "../condition/condition.js";
-import {setOffers} from "../condition/condition.js";
-import {setCities} from "../condition/condition.js";
+import adaptReviews from "../../adapters/reviews.js";
+import {setActiveCity, setOffers, setCities, setReviews} from "../condition/condition.js";
+// import {setOffers} from "../condition/condition.js";
+// import {setCities} from "../condition/condition.js";
 import {getSortedOffers} from "../condition/selectors.js";
 
 const initialState = {
@@ -28,7 +29,6 @@ const setIsDataLoaded = (isDataLoaded) => {
     payload: isDataLoaded,
   };
 };
-
 
 const getOffersAsync = () => (dispatch, getState, api) => {
   return api.get(`/hotels`)
@@ -56,6 +56,22 @@ const getOffersAsync = () => (dispatch, getState, api) => {
     });
 };
 
+const getReviewsAsync = (id) => (dispatch, getState, api) => {
+  return api.get(`/comments/${id}`)
+    .then((response) => {
+      const reviews = adaptReviews(response.data);
+      dispatch(setReviews(reviews, id));
+    });
+};
+
+const setReviewsAsync = (id, data) => (dispatch, getState, api) => {
+  return api.post(`/comments/${id}`, data)
+    .then((response) => {
+      const reviews = adaptReviews(response.data);
+      dispatch(setReviews(reviews, id));
+    });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.SET_SERVER_OFFERS:
@@ -71,4 +87,4 @@ const reducer = (state = initialState, action) => {
   return state;
 };
 
-export {reducer, getOffersAsync};
+export {reducer, getOffersAsync, getReviewsAsync, setReviewsAsync};

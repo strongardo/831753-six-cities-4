@@ -15,8 +15,7 @@ export const withActiveFlag = (Component) => {
 
     _handleActiveChange() {
       this.setState(
-          (prevState) => ({isActive: !prevState.isActive})
-      );
+          (prevState) => ({isActive: !prevState.isActive}));
     }
 
     render() {
