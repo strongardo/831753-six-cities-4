@@ -22,6 +22,7 @@ const ReviewsForm = (props) => {
     toggleFormStatus(form);
     form.reset();
     starsCount = 0;
+    text = ``;
     buttonRef.current.disabled = true;
   };
 
@@ -38,7 +39,13 @@ const ReviewsForm = (props) => {
     evt.preventDefault();
     toggleFormStatus();
 
-    props.onSubmit(props.id, starsCount, text, onSuccess, onError);
+    props.onSubmit(props.id, starsCount, text)
+    .then(() => {
+      onSuccess();
+    })
+    .catch(() => {
+      onError();
+    });
   };
 
   const onRadioChange = (evt) => {
@@ -78,7 +85,7 @@ const ReviewsForm = (props) => {
           defaultValue={5}
           id="5-stars"
           type="radio"
-          onChange={onRadioChange}
+          onClick={onRadioChange}
         />
         <label
           htmlFor="5-stars"
@@ -99,7 +106,7 @@ const ReviewsForm = (props) => {
           defaultValue={4}
           id="4-stars"
           type="radio"
-          onChange={onRadioChange}
+          onClick={onRadioChange}
         />
         <label
           htmlFor="4-stars"
@@ -120,7 +127,7 @@ const ReviewsForm = (props) => {
           defaultValue={3}
           id="3-stars"
           type="radio"
-          onChange={onRadioChange}
+          onClick={onRadioChange}
         />
         <label
           htmlFor="3-stars"
@@ -141,7 +148,7 @@ const ReviewsForm = (props) => {
           defaultValue={2}
           id="2-stars"
           type="radio"
-          onChange={onRadioChange}
+          onClick={onRadioChange}
         />
         <label
           htmlFor="2-stars"
@@ -162,7 +169,7 @@ const ReviewsForm = (props) => {
           defaultValue={1}
           id="1-star"
           type="radio"
-          onChange={onRadioChange}
+          onClick={onRadioChange}
         />
         <label
           htmlFor="1-star"
@@ -212,11 +219,11 @@ ReviewsForm.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onSubmit(id, starsCount, text, onSuccess, onError) {
-    dispatch(setReviewsAsync(id, {
+  onSubmit(id, starsCount, text) {
+    return dispatch(setReviewsAsync(id, {
       comment: text,
       rating: starsCount,
-    }, onSuccess, onError));
+    }));
   },
 });
 

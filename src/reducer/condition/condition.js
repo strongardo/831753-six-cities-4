@@ -12,6 +12,7 @@ const ActionType = {
   SET_CITIES: `SET_CITIES`,
   SET_SORT_TYPE: `SET_SORT_TYPE`,
   SET_OFFERS: `SET_OFFERS`,
+  SET_REVIEWS: `SET_REVIEWS`,
 };
 
 const setActiveCity = (city) => {
@@ -42,6 +43,14 @@ const setOffers = (offers) => {
   };
 };
 
+const setReviews = (reviews, id) => {
+  return {
+    type: ActionType.SET_REVIEWS,
+    payload: reviews,
+    id,
+  };
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.SET_ACTIVE_CITY:
@@ -60,9 +69,19 @@ const reducer = (state = initialState, action) => {
       return extend(state, {
         offers: action.payload,
       });
+    case ActionType.SET_REVIEWS:
+      const offers = state.offers.map((offer) => {
+        if (offer.id === action.id) {
+          offer.reviews = action.payload;
+        }
+        return offer;
+      });
+      return extend(state, {
+        offers,
+      });
   }
 
   return state;
 };
 
-export {reducer, setActiveCity, setCities, setSortType, setOffers};
+export {reducer, setActiveCity, setCities, setSortType, setOffers, setReviews};

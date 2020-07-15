@@ -8,19 +8,12 @@ import {getReviewsAsync} from "../../reducer/data/data.js";
 class ReviewsList extends PureComponent {
   constructor(props) {
     super(props);
-
-    this._onSuccess = this._onSuccess.bind(this);
-    this._onError = this._onError.bind(this);
-
-    this.state = {
-      reviews: [],
-    };
   }
 
   render() {
     const getListMarkup = () => {
-      const stateReviews = this.state.reviews;
-      const reviews = (stateReviews.length <= 10) ? stateReviews : stateReviews.slice(0, 10);
+      const propsReviews = this.props.reviews;
+      const reviews = (propsReviews.length <= 10) ? propsReviews : propsReviews.slice(0, 10);
       const sortedReviews = sortByDate(reviews);
 
       return (
@@ -35,38 +28,33 @@ class ReviewsList extends PureComponent {
     return (
       <>
         <h2 className="reviews__title">
-          Reviews · <span className="reviews__amount">{this.state.reviews.length}</span>
+          Reviews · <span className="reviews__amount">{this.props.reviews.length}</span>
         </h2>
-        {(this.state.reviews.length) ? getListMarkup() : null }
+        {(this.props.reviews.length) ? getListMarkup() : null}
       </>
     );
   }
 
-  _onSuccess(serverReviews) {
-    this.setState({reviews: serverReviews});
-  }
-
-  _onError() {
-    this.setState({reviews: []});
-  }
-
   componentDidMount() {
-    this.props.downloadReviews(this.props.id, this._onSuccess, this._onError);
+    this.props.downloadReviews(this.props.id);
   }
 
-  componentDidUpdate() {
-    this.props.downloadReviews(this.props.id, this._onSuccess, this._onError);
+  componentDidUpdate(prevProps) {
+    if (prevProps.id !== this.props.id) {
+      this.props.downloadReviews(this.props.id);
+    }
   }
 }
 
 ReviewsList.propTypes = {
   downloadReviews: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
+  reviews: PropTypes.array.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  downloadReviews(id, onSuccess, onError) {
-    dispatch(getReviewsAsync(id, onSuccess, onError));
+  downloadReviews(id) {
+    dispatch(getReviewsAsync(id));
   },
 });
 

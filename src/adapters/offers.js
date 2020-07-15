@@ -24,6 +24,7 @@ const adaptOffers = (serverOffers) => {
         zoom: offer.city.location.zoom,
         id: offer.city.name,
       },
+      reviews: [],
       id: offer.id,
     };
   });

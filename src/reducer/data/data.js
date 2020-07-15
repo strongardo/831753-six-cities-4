@@ -1,9 +1,9 @@
 import {extend} from "../../utils.js";
 import adaptOffers from "../../adapters/offers.js";
 import adaptReviews from "../../adapters/reviews.js";
-import {setActiveCity} from "../condition/condition.js";
-import {setOffers} from "../condition/condition.js";
-import {setCities} from "../condition/condition.js";
+import {setActiveCity, setOffers, setCities, setReviews} from "../condition/condition.js";
+// import {setOffers} from "../condition/condition.js";
+// import {setCities} from "../condition/condition.js";
 import {getSortedOffers} from "../condition/selectors.js";
 
 const initialState = {
@@ -56,24 +56,19 @@ const getOffersAsync = () => (dispatch, getState, api) => {
     });
 };
 
-const getReviewsAsync = (id, onSuccess, onError) => (dispatch, getState, api) => {
+const getReviewsAsync = (id) => (dispatch, getState, api) => {
   return api.get(`/comments/${id}`)
     .then((response) => {
       const reviews = adaptReviews(response.data);
-      onSuccess(reviews);
-    })
-    .catch(() => {
-      onError();
+      dispatch(setReviews(reviews, id));
     });
 };
 
-const setReviewsAsync = (id, data, onSuccess, onError) => (dispatch, getState, api) => {
+const setReviewsAsync = (id, data) => (dispatch, getState, api) => {
   return api.post(`/comments/${id}`, data)
-    .then(() => {
-      onSuccess();
-    })
-    .catch(() => {
-      onError();
+    .then((response) => {
+      const reviews = adaptReviews(response.data);
+      dispatch(setReviews(reviews, id));
     });
 };
 

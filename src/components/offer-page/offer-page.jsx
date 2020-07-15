@@ -28,6 +28,7 @@ const OfferPage = (props) => {
     bedroomsCount,
     guestsCount,
     isPremium,
+    reviews,
   } = currentOffer;
 
   const markers = offers.map(({coordinates, id}) => ({
@@ -172,7 +173,7 @@ const OfferPage = (props) => {
                 <div className="property__description">{descriptionMarkup}</div>
               </div>
               <section className="property__reviews reviews">
-                <ReviewsList id={currentId} />
+                <ReviewsList id={currentId} reviews={reviews} />
                 {(userStatus === UserStatus.AUTH) ? <ReviewsForm id={currentId}/> : null}
               </section>
             </div>
