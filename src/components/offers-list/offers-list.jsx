@@ -9,7 +9,6 @@ const OffersList = (props) => {
       key={offer.id}
       offer={offer}
       onCardHover={props.onCardHover}
-      onCardTitleClick={props.onCardTitleClick}
     />;
   });
 };
@@ -26,7 +25,6 @@ OffersList.propTypes = {
         id: PropTypes.number.isRequired,
       })
   ).isRequired,
-  onCardTitleClick: PropTypes.func.isRequired,
   onCardHover: PropTypes.func,
 };
 

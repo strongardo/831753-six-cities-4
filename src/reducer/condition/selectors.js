@@ -22,6 +22,10 @@ export const getOffers = (state) => {
   return state[NAME_SPACE].offers;
 };
 
+export const getFavoriteOffers = (state) => {
+  return state[NAME_SPACE].favoriteOffers;
+};
+
 export const getFilteredOffers = createSelector(
     getCity,
     getServerOffers,

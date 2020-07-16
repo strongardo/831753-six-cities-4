@@ -11,10 +11,11 @@ import {withActiveId} from "../../hocs/with-active-id/with-active-id.jsx";
 import {getCity, getOffers} from "../../reducer/condition/selectors.js";
 import {getUserStatus, getUserData} from "../../reducer/user/selectors.js";
 import {UserStatus} from "../../const.js";
-
+import {Link} from "react-router-dom";
+import {AppRoute} from "../../const.js";
 
 const Main = (props) => {
-  const {onCardTitleClick, city, offers, userStatus, userData, activeCardId, onActiveCardIdChange} = props;
+  const {city, offers, userStatus, userData, activeCardId, onActiveCardIdChange} = props;
 
   const markers = offers.map(({coordinates, id}) => ({
     coordinates,
@@ -32,7 +33,6 @@ const Main = (props) => {
         <div className="cities__places-list places__list tabs__content">
           <OffersList
             offers={offers}
-            onCardTitleClick={onCardTitleClick}
             onCardHover={onActiveCardIdChange}
           />
         </div>
@@ -70,15 +70,19 @@ const Main = (props) => {
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <a
+                  <Link
                     className="header__nav-link header__nav-link--profile"
-                    href="#"
+                    to={(userStatus === UserStatus.NO_AUTH)
+                      ? AppRoute.LOGIN
+                      : AppRoute.ELECT}
                   >
                     <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                     <span className="header__user-name user__name">
-                      {(userStatus === UserStatus.NO_AUTH) ? `Sign In` : userData.email}
+                      {(userStatus === UserStatus.NO_AUTH)
+                        ? `Sign In`
+                        : `${userData.email}`}
                     </span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>
@@ -125,7 +129,6 @@ Main.propTypes = {
     isPro: PropTypes.bool.isRequired,
     name: PropTypes.string.isRequired,
   }),
-  onCardTitleClick: PropTypes.func.isRequired,
   activeCardId: PropTypes.number.isRequired,
   onActiveCardIdChange: PropTypes.func.isRequired,
 };

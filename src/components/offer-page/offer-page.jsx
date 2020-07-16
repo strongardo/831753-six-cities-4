@@ -12,8 +12,12 @@ import {getUserStatus, getUserData} from "../../reducer/user/selectors.js";
 import {UserStatus} from "../../const.js";
 
 const OfferPage = (props) => {
-  const {currentId, offers, onCardTitleClick, city, userStatus, userData} = props;
-  const currentOffer = offers.find((offer) => offer.id === currentId);
+  const currentId = +props.match.params.id;
+  const {offers, city, userStatus, userData} = props;
+
+  const currentOffer = offers.find((offer) => {
+    return offer.id === currentId;
+  });
   const nearestOffers = offers.filter((offer) => offer.id !== currentId);
 
   const {
@@ -195,7 +199,6 @@ const OfferPage = (props) => {
               <OffersList
                 offers={nearestOffers}
                 sortType={SortType.POPULAR}
-                onCardTitleClick={onCardTitleClick}
               />
             </div>
           </section>
@@ -237,8 +240,11 @@ OfferPage.propTypes = {
     isPro: PropTypes.bool.isRequired,
     name: PropTypes.string.isRequired,
   }),
-  currentId: PropTypes.number.isRequired,
-  onCardTitleClick: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
 };
 
 const mapStateToProps = (state) => {

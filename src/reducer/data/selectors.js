@@ -9,7 +9,3 @@ export const getServerOffers = (state) => {
 export const getIsDataLoaded = (state) => {
   return state[NAME_SPACE].isDataLoaded;
 };
-
-export const getReviews = (state) => {
-  return state[NAME_SPACE].serverOffers.reviews;
-};

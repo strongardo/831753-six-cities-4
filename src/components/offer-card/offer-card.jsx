@@ -1,9 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
+import {AppRoute} from "../../const.js";
+import clsx from "clsx";
+import {withActiveFlag} from "../../hocs/with-active-flag/with-active-flag.jsx";
+import {setFavoriteOffers} from "../../reducer/condition/condition.js";
+import {connect} from "react-redux";
+import {getFavoriteOffers} from "../../reducer/condition/selectors.js";
 
 const OfferCard = (props) => {
-  const {offer, onCardHover, onCardTitleClick} = props;
+  const {offer, onCardHover, favoriteOffers} = props;
   const {name, type, price, url, starsCount, isPremium, id} = offer;
+
+  const isContains = favoriteOffers.some((favoriteOffer) => {
+    return favoriteOffer.payload.id === offer.id;
+  });
 
   const handleCardMouseOver = () => {
     if (onCardHover) {
@@ -15,12 +26,6 @@ const OfferCard = (props) => {
     if (onCardHover) {
       onCardHover();
     }
-  };
-
-  const handleTitleClick = (evt) => {
-    evt.preventDefault();
-
-    onCardTitleClick(id);
   };
 
   const premiumMarkup = isPremium ?
@@ -54,7 +59,14 @@ const OfferCard = (props) => {
             <b className="place-card__price-value">{price}</b>
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button button" type="button">
+          <button
+            className={clsx(`place-card__bookmark-button button`, isContains && `place-card__bookmark-button--active`)}
+            type="button"
+            onClick={() => {
+              props.onActiveChange();
+              props.onFavoriteButtonClick(offer);
+            }}
+          >
             <svg className="place-card__bookmark-icon" width={18} height={19}>
               <use xlinkHref="#icon-bookmark" />
             </svg>
@@ -68,9 +80,7 @@ const OfferCard = (props) => {
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#" className="place-card__link" onClick={handleTitleClick}>
-            {name}
-          </a>
+          <Link to={`${AppRoute.OFFER}${id}`} className="place-card__link">{name}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>
@@ -89,7 +99,22 @@ OfferCard.propTypes = {
     id: PropTypes.number.isRequired,
   }).isRequired,
   onCardHover: PropTypes.func,
-  onCardTitleClick: PropTypes.func.isRequired,
+  onActiveChange: PropTypes.func.isRequired,
+  onFavoriteButtonClick: PropTypes.func.isRequired,
+  favoriteOffers: PropTypes.array.isRequired,
 };
 
-export default OfferCard;
+const mapStateToProps = (state) => {
+  return {
+    favoriteOffers: getFavoriteOffers(state),
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  onFavoriteButtonClick(offer) {
+    dispatch(setFavoriteOffers(offer));
+  },
+});
+
+export {OfferCard};
+export default withActiveFlag(connect(mapStateToProps, mapDispatchToProps)(OfferCard));
