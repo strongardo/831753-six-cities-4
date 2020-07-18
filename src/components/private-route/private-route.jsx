@@ -8,20 +8,17 @@ import {getUserStatus} from "../../reducer/user/selectors.js";
 
 
 const PrivateRoute = (props) => {
-  const {render, path, exact, userStatus} = props;
-
+  const {children, userStatus, path, exact} = props;
+  if (userStatus !== UserStatus.AUTH) {
+    return <Redirect to={AppRoute.LOGIN} />;
+  }
   return (
     <Route
       path={path}
       exact={exact}
-      render={() => {
-        return (
-          userStatus === UserStatus.AUTH
-            ? render()
-            : <Redirect to={AppRoute.LOGIN} />
-        );
-      }}
-    />
+    >
+      {children}
+    </ Route>
   );
 };
 
@@ -29,7 +26,7 @@ PrivateRoute.propTypes = {
   userStatus: PropTypes.string.isRequired,
   exact: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
-  render: PropTypes.func.isRequired,
+  children: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

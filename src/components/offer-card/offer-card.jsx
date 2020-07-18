@@ -7,6 +7,7 @@ import {withActiveFlag} from "../../hocs/with-active-flag/with-active-flag.jsx";
 import {setFavoriteOffers} from "../../reducer/condition/condition.js";
 import {connect} from "react-redux";
 import {getFavoriteOffers} from "../../reducer/condition/selectors.js";
+// import {getUserStatus} from "../../reducer/user/selectors.js";
 
 const OfferCard = (props) => {
   const {offer, onCardHover, favoriteOffers} = props;
@@ -27,6 +28,10 @@ const OfferCard = (props) => {
       onCardHover();
     }
   };
+
+  // const onFavoriteButtonClick = () => {
+
+  // }
 
   const premiumMarkup = isPremium ?
     (<div className="place-card__mark">
@@ -64,7 +69,7 @@ const OfferCard = (props) => {
             type="button"
             onClick={() => {
               props.onActiveChange();
-              props.onFavoriteButtonClick(offer);
+              // onFavoriteButtonClick(offer);
             }}
           >
             <svg className="place-card__bookmark-icon" width={18} height={19}>
@@ -100,7 +105,7 @@ OfferCard.propTypes = {
   }).isRequired,
   onCardHover: PropTypes.func,
   onActiveChange: PropTypes.func.isRequired,
-  onFavoriteButtonClick: PropTypes.func.isRequired,
+  dispatchFavoriteOffer: PropTypes.func.isRequired,
   favoriteOffers: PropTypes.array.isRequired,
 };
 
@@ -111,7 +116,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onFavoriteButtonClick(offer) {
+  dispatchFavoriteOffer(offer) {
     dispatch(setFavoriteOffers(offer));
   },
 });

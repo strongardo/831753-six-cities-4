@@ -10,7 +10,6 @@ import Elect from "../elect/elect.jsx";
 import PrivateRoute from "../private-route/private-route.jsx";
 import {getIsDataLoaded} from "../../reducer/data/selectors.js";
 import {AppRoute} from "../../const.js";
-// import history from "../../history.js";
 
 class App extends PureComponent {
   constructor(props) {
@@ -28,12 +27,9 @@ class App extends PureComponent {
             <PrivateRoute
               exact
               path={AppRoute.ELECT}
-              render={() => {
-                return (
-                  <Elect />
-                );
-              }}
-            />
+            >
+              <Elect />
+            </PrivateRoute>
           </Switch>
         </BrowserRouter>
       );
