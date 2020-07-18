@@ -2,7 +2,6 @@ import React, {PureComponent} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import Review from "../review/review.jsx";
-import {sortByDate} from "../../utils.js";
 import {getReviewsAsync} from "../../reducer/data/data.js";
 
 class ReviewsList extends PureComponent {
@@ -12,13 +11,9 @@ class ReviewsList extends PureComponent {
 
   render() {
     const getListMarkup = () => {
-      const propsReviews = this.props.reviews;
-      const reviews = (propsReviews.length <= 10) ? propsReviews : propsReviews.slice(0, 10);
-      const sortedReviews = sortByDate(reviews);
-
       return (
         <ul className="reviews__list">
-          {sortedReviews.map((review) => {
+          {this.props.reviews.map((review) => {
             return <Review key={review.id} review={review} />;
           })}
         </ul>

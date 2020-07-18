@@ -9,3 +9,10 @@ export const UserStatus = {
   AUTH: `AUTH`,
   NO_AUTH: `NO_AUTH`,
 };
+
+export const AppRoute = {
+  LOGIN: `/login`,
+  OFFER: `/offer/`,
+  ELECT: `/elect`,
+  ROOT: `/`,
+};

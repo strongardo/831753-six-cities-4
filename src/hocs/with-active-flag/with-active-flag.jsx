@@ -6,16 +6,14 @@ export const withActiveFlag = (Component) => {
       super(props);
 
       this.state = {
-        isActive: false
+        isActive: false,
       };
 
-      this._handleActiveChange =
-        this._handleActiveChange.bind(this);
+      this._handleActiveChange = this._handleActiveChange.bind(this);
     }
 
     _handleActiveChange() {
-      this.setState(
-          (prevState) => ({isActive: !prevState.isActive}));
+      this.setState((prevState) => ({isActive: !prevState.isActive}));
     }
 
     render() {

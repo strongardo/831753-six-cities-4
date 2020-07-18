@@ -6,17 +6,14 @@ import Main from "../main/main.jsx";
 import OfferPage from "../offer-page/offer-page.jsx";
 import NoDataContainer from "../no-data-container/no-data-container.jsx";
 import Login from "../login/login.jsx";
+import Elect from "../elect/elect.jsx";
+import PrivateRoute from "../private-route/private-route.jsx";
 import {getIsDataLoaded} from "../../reducer/data/selectors.js";
+import {AppRoute} from "../../const.js";
 
 class App extends PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = {
-      currentId: null,
-    };
-
-    this._handleCardTitleClick = this._handleCardTitleClick.bind(this);
   }
 
   render() {
@@ -24,49 +21,21 @@ class App extends PureComponent {
       return (
         <BrowserRouter>
           <Switch>
-            <Route exact path="/">
-              {this._renderPage()}
-            </Route>
-            <Route exact path="/dev-offer">
-              <OfferPage
-                currentId={1}
-                onCardTitleClick={this._handleCardTitleClick}
-              />
-            </Route>
-            <Route exact path="/dev-login">
-              <Login />
-            </Route>
+            <Route exact path={AppRoute.ROOT} component={Main} />
+            <Route exact path={AppRoute.LOGIN} component={Login} />
+            <Route exact path={`${AppRoute.OFFER}:id`} component={OfferPage} />
+            <PrivateRoute
+              exact
+              path={AppRoute.ELECT}
+            >
+              <Elect />
+            </PrivateRoute>
           </Switch>
         </BrowserRouter>
       );
     } else {
       return <NoDataContainer />;
     }
-  }
-
-  _renderPage() {
-    const currentId = this.state.currentId;
-
-    if (currentId) {
-      return (
-        <OfferPage
-          currentId={currentId}
-          onCardTitleClick={this._handleCardTitleClick}
-        />
-      );
-    } else {
-      return (
-        <Main
-          onCardTitleClick={this._handleCardTitleClick}
-        />
-      );
-    }
-  }
-
-  _handleCardTitleClick(id) {
-    this.setState({
-      currentId: id,
-    });
   }
 }
 

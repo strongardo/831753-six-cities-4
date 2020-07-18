@@ -2,8 +2,7 @@ import {extend} from "../../utils.js";
 import adaptOffers from "../../adapters/offers.js";
 import adaptReviews from "../../adapters/reviews.js";
 import {setActiveCity, setOffers, setCities, setReviews} from "../condition/condition.js";
-// import {setOffers} from "../condition/condition.js";
-// import {setCities} from "../condition/condition.js";
+import {sortByDate} from "../../utils.js";
 import {getSortedOffers} from "../condition/selectors.js";
 
 const initialState = {
@@ -59,8 +58,10 @@ const getOffersAsync = () => (dispatch, getState, api) => {
 const getReviewsAsync = (id) => (dispatch, getState, api) => {
   return api.get(`/comments/${id}`)
     .then((response) => {
-      const reviews = adaptReviews(response.data);
-      dispatch(setReviews(reviews, id));
+      const serverReviews = adaptReviews(response.data);
+      const reviews = (serverReviews.length <= 10) ? serverReviews : serverReviews.slice(0, 10);
+      const sortedReviews = sortByDate(reviews);
+      dispatch(setReviews(sortedReviews, id));
     });
 };
 

@@ -2,6 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
+import Header from "../header/header.jsx";
 import CitiesList from "../cities-list/cities-list.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
 import Map from "../map/map.jsx";
@@ -10,11 +11,9 @@ import EmptyCitiesContainer from "../empty-cities-container/empty-cities-contain
 import {withActiveId} from "../../hocs/with-active-id/with-active-id.jsx";
 import {getCity, getOffers} from "../../reducer/condition/selectors.js";
 import {getUserStatus, getUserData} from "../../reducer/user/selectors.js";
-import {UserStatus} from "../../const.js";
-
 
 const Main = (props) => {
-  const {onCardTitleClick, city, offers, userStatus, userData, activeCardId, onActiveCardIdChange} = props;
+  const {city, offers, activeCardId, onActiveCardIdChange} = props;
 
   const markers = offers.map(({coordinates, id}) => ({
     coordinates,
@@ -32,7 +31,6 @@ const Main = (props) => {
         <div className="cities__places-list places__list tabs__content">
           <OffersList
             offers={offers}
-            onCardTitleClick={onCardTitleClick}
             onCardHover={onActiveCardIdChange}
           />
         </div>
@@ -53,38 +51,7 @@ const Main = (props) => {
 
   const markup = (
     <div className="page page--gray page--main">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <a className="header__logo-link header__logo-link--active">
-                <img
-                  className="header__logo"
-                  src="img/logo.svg"
-                  alt="6 cities logo"
-                  width={81}
-                  height={41}
-                />
-              </a>
-            </div>
-            <nav className="header__nav">
-              <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a
-                    className="header__nav-link header__nav-link--profile"
-                    href="#"
-                  >
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__user-name user__name">
-                      {(userStatus === UserStatus.NO_AUTH) ? `Sign In` : userData.email}
-                    </span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <Header />
       <main className={clsx(`page__main page__main--index`, !offers.length && `page__main--index-empty`)}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
@@ -118,14 +85,6 @@ Main.propTypes = {
         id: PropTypes.number.isRequired,
       })
   ).isRequired,
-  userStatus: PropTypes.string.isRequired,
-  userData: PropTypes.shape({
-    avatarUrl: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    isPro: PropTypes.bool.isRequired,
-    name: PropTypes.string.isRequired,
-  }),
-  onCardTitleClick: PropTypes.func.isRequired,
   activeCardId: PropTypes.number.isRequired,
   onActiveCardIdChange: PropTypes.func.isRequired,
 };
