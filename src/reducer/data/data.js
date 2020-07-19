@@ -11,6 +11,10 @@ const initialState = {
   serverOffers: null,
   isDataLoaded: false,
   favoriteOffers: [],
+  nearestOffers: {
+    offerId: -1,
+    offers: [],
+  }
 };
 
 const ActionType = {
@@ -18,6 +22,7 @@ const ActionType = {
   SET_IS_DATA_LOADED: `SET_IS_DATA_LOADED`,
   SET_FAVORITE_OFFERS: `SET_FAVORITE_OFFERS`,
   TOGGLE_FAVORITE: `TOGGLE_FAVORITE`,
+  SET_NEAREST_OFFERS: `SET_NEAREST_OFFERS`,
 };
 
 const setServerOffers = (serverOffers) => {
@@ -46,6 +51,23 @@ const toggleFavorite = (id) => {
     type: ActionType.TOGGLE_FAVORITE,
     payload: id,
   };
+};
+
+const setNearestOffers = (nearestOffers) => {
+  return {
+    type: ActionType.TOGGLE_FAVORITE,
+    payload: nearestOffers,
+  };
+};
+
+const getNearestOffersAsync = (id) => (dispatch, getState, api) => {
+  return api.get(`/hotels/${id}/around`)
+    .then((response) => {
+      dispatch(setNearestOffers({
+        offerId: id,
+        offers: adaptOffers(response.data),
+      }));
+    });
 };
 
 const getOffersAsync = () => (dispatch, getState, api) => {
@@ -119,6 +141,10 @@ const reducer = (state = initialState, action) => {
       return extend(state, {
         favoriteOffers: action.payload,
       });
+    case ActionType.SET_NEAREST_OFFERS:
+      return extend(state, {
+        nearestOffers: action.payload,
+      });
     case ActionType.TOGGLE_FAVORITE:
       const offers = state.serverOffers.map((offer) => {
         if (offer.id === action.payload.id) {
@@ -134,4 +160,12 @@ const reducer = (state = initialState, action) => {
   return state;
 };
 
-export {reducer, getOffersAsync, getReviewsAsync, setReviewsAsync, toggleFavoriteAsync, getFavoriteOffersAsync};
+export {
+  reducer,
+  getOffersAsync,
+  getReviewsAsync,
+  setReviewsAsync,
+  toggleFavoriteAsync,
+  getFavoriteOffersAsync,
+  getNearestOffersAsync,
+};

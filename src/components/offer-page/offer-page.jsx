@@ -8,19 +8,19 @@ import ReviewsList from "../reviews-list/reviews-list.jsx";
 import ReviewsForm from "../reviews-form/reviews-form.jsx";
 import Map from "../map/map.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
-import {getOffers, getCity} from "../../reducer/condition/selectors.js";
+import {getCity} from "../../reducer/condition/selectors.js";
 import {getUserStatus} from "../../reducer/user/selectors.js";
-import {getOffer} from "../../reducer/data/selectors.js";
+import {getOffer, getNearestOffers} from "../../reducer/data/selectors.js";
 import {UserStatus} from "../../const.js";
 
 const OfferPage = (props) => {
   const currentId = Number(props.match.params.id);
-  const {offers, city, userStatus, offer} = props;
+  const {nearestOffers, city, userStatus, offer} = props;
 
   // const currentOffer = offers.find((offer) => {
   //   return offer.id === currentId;
   // });
-  const nearestOffers = offers.filter((nearestOffer) => nearestOffer.id !== currentId);
+  // const nearestOffers = offers.filter((nearestOffer) => nearestOffer.id !== currentId);
 
   const {
     name,
@@ -37,7 +37,7 @@ const OfferPage = (props) => {
     reviews,
   } = offer;
 
-  const markers = offers.map(({coordinates, id}) => ({
+  const markers = nearestOffers.map(({coordinates, id}) => ({
     id,
     coordinates,
   }));
@@ -185,7 +185,7 @@ OfferPage.propTypes = {
     coordinates: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
     zoom: PropTypes.number.isRequired,
   }),
-  offers: PropTypes.arrayOf(PropTypes.shape({
+  nearestOffers: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     descriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
     advantages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -235,7 +235,7 @@ OfferPage.propTypes = {
 const mapStateToProps = (state, props) => {
   return {
     offer: getOffer(state, Number(props.match.params.id)),
-    offers: getOffers(state),
+    nearestOffers: getNearestOffers(state),
     city: getCity(state),
     userStatus: getUserStatus(state),
   };
