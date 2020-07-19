@@ -10,16 +10,17 @@ import Map from "../map/map.jsx";
 import OffersList from "../offers-list/offers-list.jsx";
 import {getOffers, getCity} from "../../reducer/condition/selectors.js";
 import {getUserStatus} from "../../reducer/user/selectors.js";
+import {getOffer} from "../../reducer/data/selectors.js";
 import {UserStatus} from "../../const.js";
 
 const OfferPage = (props) => {
   const currentId = Number(props.match.params.id);
-  const {offers, city, userStatus} = props;
+  const {offers, city, userStatus, offer} = props;
 
-  const currentOffer = offers.find((offer) => {
-    return offer.id === currentId;
-  });
-  const nearestOffers = offers.filter((offer) => offer.id !== currentId);
+  // const currentOffer = offers.find((offer) => {
+  //   return offer.id === currentId;
+  // });
+  const nearestOffers = offers.filter((nearestOffer) => nearestOffer.id !== currentId);
 
   const {
     name,
@@ -34,7 +35,7 @@ const OfferPage = (props) => {
     guestsCount,
     isPremium,
     reviews,
-  } = currentOffer;
+  } = offer;
 
   const markers = offers.map(({coordinates, id}) => ({
     id,
@@ -209,10 +210,31 @@ OfferPage.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   }).isRequired,
+  offer: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    descriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+    advantages: PropTypes.arrayOf(PropTypes.string).isRequired,
+    owner: PropTypes.shape({
+      url: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      isSuper: PropTypes.bool.isRequired,
+    }).isRequired,
+    type: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    urls: PropTypes.arrayOf(PropTypes.string).isRequired,
+    starsCount: PropTypes.number.isRequired,
+    bedroomsCount: PropTypes.number.isRequired,
+    guestsCount: PropTypes.number.isRequired,
+    isPremium: PropTypes.bool.isRequired,
+    coordinates: PropTypes.arrayOf(PropTypes.number),
+    id: PropTypes.number.isRequired,
+    reviews: PropTypes.array.isRequired,
+  }).isRequired,
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
   return {
+    offer: getOffer(state, Number(props.match.params.id)),
     offers: getOffers(state),
     city: getCity(state),
     userStatus: getUserStatus(state),

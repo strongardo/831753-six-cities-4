@@ -22,16 +22,6 @@ export const getOffers = (state) => {
   return state[NAME_SPACE].offers;
 };
 
-export const getCurrentOffer = (state, currentId) => {
-  return getOffers(state).find((offer) => {
-    return offer.id === currentId;
-  });
-};
-
-export const getFavoriteOffers = (state) => {
-  return state[NAME_SPACE].favoriteOffers;
-};
-
 export const getFilteredOffers = createSelector(
     getCity,
     getServerOffers,

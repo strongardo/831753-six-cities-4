@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import OfferCard from "../offer-card/offer-card.jsx";
 
 const OffersList = (props) => {
-
   return props.offers.map((offer) => {
     return <OfferCard
       key={offer.id}

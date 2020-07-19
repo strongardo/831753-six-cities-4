@@ -9,8 +9,11 @@ import {getUserStatus} from "../../reducer/user/selectors.js";
 
 const PrivateRoute = (props) => {
   const {children, userStatus, path, exact} = props;
-  if (userStatus !== UserStatus.AUTH) {
+  if (userStatus !== UserStatus.AUTH && path === AppRoute.ELECT) {
     return <Redirect to={AppRoute.LOGIN} />;
+  }
+  if (userStatus === UserStatus.AUTH && path === AppRoute.LOGIN) {
+    return <Redirect to={AppRoute.ROOT} />;
   }
   return (
     <Route

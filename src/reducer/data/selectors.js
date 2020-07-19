@@ -9,3 +9,13 @@ export const getServerOffers = (state) => {
 export const getIsDataLoaded = (state) => {
   return state[NAME_SPACE].isDataLoaded;
 };
+
+export const getFavoriteOffers = (state) => {
+  return state[NAME_SPACE].favoriteOffers;
+};
+
+export const getOffer = (state, id) => {
+  return getServerOffers(state).find((offer) => {
+    return offer.id === id;
+  });
+};

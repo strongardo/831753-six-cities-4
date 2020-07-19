@@ -1,7 +1,7 @@
 import React, {PureComponent} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {Switch, Route, BrowserRouter} from "react-router-dom";
+import {Switch, Route, Router} from "react-router-dom";
 import Main from "../main/main.jsx";
 import OfferPage from "../offer-page/offer-page.jsx";
 import NoDataContainer from "../no-data-container/no-data-container.jsx";
@@ -10,6 +10,7 @@ import Elect from "../elect/elect.jsx";
 import PrivateRoute from "../private-route/private-route.jsx";
 import {getIsDataLoaded} from "../../reducer/data/selectors.js";
 import {AppRoute} from "../../const.js";
+import history from "../../history.js";
 
 class App extends PureComponent {
   constructor(props) {
@@ -19,10 +20,9 @@ class App extends PureComponent {
   render() {
     if (this.props.isDataLoaded) {
       return (
-        <BrowserRouter>
+        <Router history={history}>
           <Switch>
             <Route exact path={AppRoute.ROOT} component={Main} />
-            <Route exact path={AppRoute.LOGIN} component={Login} />
             <Route exact path={`${AppRoute.OFFER}:id`} component={OfferPage} />
             <PrivateRoute
               exact
@@ -30,8 +30,14 @@ class App extends PureComponent {
             >
               <Elect />
             </PrivateRoute>
+            <PrivateRoute
+              exact
+              path={AppRoute.LOGIN}
+            >
+              <Login />
+            </PrivateRoute>
           </Switch>
-        </BrowserRouter>
+        </Router>
       );
     } else {
       return <NoDataContainer />;

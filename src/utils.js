@@ -35,3 +35,14 @@ export const sortOffersByType = (offers, sortType) => {
   }
   return sortedOffers;
 };
+
+export const getNonRepeatingCities = (arr) => {
+  const nonRepeatingCities = arr.reduce(
+      (acc, {city}) => {
+        acc[city.name] = city;
+        return acc;
+      }
+      , {});
+
+  return Object.values(nonRepeatingCities);
+};

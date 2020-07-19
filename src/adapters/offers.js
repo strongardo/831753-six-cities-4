@@ -17,6 +17,7 @@ const adaptOffers = (serverOffers) => {
       bedroomsCount: offer.bedrooms,
       guestsCount: offer.max_adults,
       isPremium: offer.is_premium,
+      isFavorite: offer.is_favorite,
       coordinates: [offer.location.latitude, offer.location.longitude],
       city: {
         name: offer.city.name,
