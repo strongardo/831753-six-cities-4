@@ -8,7 +8,6 @@ const Login = (props) => {
   const loginRef = createRef();
   const passwordRef = createRef();
   const onSubmit = props.onSubmit;
-  // const push = props.history.push;
 
   return (
     <div className="page page--gray page--login">
@@ -50,17 +49,14 @@ const Login = (props) => {
 
 Login.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  // history: PropTypes.shape({
-  //   push: PropTypes.func.isRequired,
-  // }).isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onSubmit(login, password, push) {
+  onSubmit(login, password) {
     dispatch(setUserStatusAsync({
       login,
       password,
-    }, push));
+    }));
   },
 });
 

@@ -5,7 +5,7 @@ const adaptOffers = (serverOffers) => {
       descriptions: [offer.description],
       type: offer.type,
       owner: {
-        url: offer.host.avatar_url,
+        url: `/${offer.host.avatar_url}`,
         name: offer.host.name,
         isSuper: offer.host.is_pro,
       },

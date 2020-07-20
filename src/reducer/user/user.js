@@ -2,6 +2,7 @@ import {extend} from "../../utils.js";
 import adaptUserData from "../../adapters/user.js";
 import {UserStatus} from "../../const.js";
 import {AppRoute} from "../../const.js";
+import history from "../../history.js";
 
 const initialState = {
   userStatus: UserStatus.NO_AUTH,
@@ -48,14 +49,14 @@ const getUserStatusAsync = () => (dispatch, getState, api) => {
     });
 };
 
-const setUserStatusAsync = (userData, push) => (dispatch, getState, api) => {
+const setUserStatusAsync = (userData) => (dispatch, getState, api) => {
   return api.post(`/login`, {
     email: userData.login,
     password: userData.password,
   })
     .then((response) => {
-      onSuccess(response, dispatch, push);
-      push(AppRoute.ROOT);
+      onSuccess(response, dispatch);
+      history.push(AppRoute.ROOT);
     })
     .catch((err) => {
       throw err;

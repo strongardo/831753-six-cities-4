@@ -58,7 +58,7 @@ const OfferCard = (props) => {
             className={clsx(`place-card__bookmark-button button`, isFavorite && `place-card__bookmark-button--active`)}
             type="button"
             onClick={() => {
-              const status = (offer.isFavorite) ? 0 : 1;
+              const status = (isFavorite) ? 0 : 1;
               props.onFavoriteButtonClick(offer.id, status);
             }}
           >

@@ -1,4 +1,4 @@
-import React, {PureComponent} from "react";
+import React, {Component} from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {Switch, Route, Router} from "react-router-dom";
@@ -12,7 +12,7 @@ import {getIsDataLoaded} from "../../reducer/data/selectors.js";
 import {AppRoute} from "../../const.js";
 import history from "../../history.js";
 
-class App extends PureComponent {
+class App extends Component {
   constructor(props) {
     super(props);
   }

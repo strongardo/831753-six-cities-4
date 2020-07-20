@@ -1,7 +1,7 @@
 import {extend} from "../../utils.js";
 import adaptOffers from "../../adapters/offers.js";
 import adaptReviews from "../../adapters/reviews.js";
-import {setActiveCity, setOffers, setCities, setReviews} from "../condition/condition.js";
+import {setActiveCity, setOffers, setCities} from "../condition/condition.js";
 import {sortByDate, getNonRepeatingCities} from "../../utils.js";
 import {getSortedOffers} from "../condition/selectors.js";
 import history from "../../history.js";
@@ -11,10 +11,7 @@ const initialState = {
   serverOffers: null,
   isDataLoaded: false,
   favoriteOffers: [],
-  nearestOffers: {
-    offerId: -1,
-    offers: [],
-  }
+  nearestOffers: [],
 };
 
 const ActionType = {
@@ -23,6 +20,15 @@ const ActionType = {
   SET_FAVORITE_OFFERS: `SET_FAVORITE_OFFERS`,
   TOGGLE_FAVORITE: `TOGGLE_FAVORITE`,
   SET_NEAREST_OFFERS: `SET_NEAREST_OFFERS`,
+  SET_REVIEWS: `SET_REVIEWS`,
+};
+
+const setReviews = (reviews, id) => {
+  return {
+    type: ActionType.SET_REVIEWS,
+    payload: reviews,
+    id,
+  };
 };
 
 const setServerOffers = (serverOffers) => {
@@ -55,18 +61,15 @@ const toggleFavorite = (id) => {
 
 const setNearestOffers = (nearestOffers) => {
   return {
-    type: ActionType.TOGGLE_FAVORITE,
+    type: ActionType.SET_NEAREST_OFFERS,
     payload: nearestOffers,
   };
 };
 
 const getNearestOffersAsync = (id) => (dispatch, getState, api) => {
-  return api.get(`/hotels/${id}/around`)
+  return api.get(`/hotels/${id}/nearby`)
     .then((response) => {
-      dispatch(setNearestOffers({
-        offerId: id,
-        offers: adaptOffers(response.data),
-      }));
+      dispatch(setNearestOffers(adaptOffers(response.data)));
     });
 };
 
@@ -99,13 +102,15 @@ const getFavoriteOffersAsync = () => (dispatch, getState, api) => {
 const toggleFavoriteAsync = (id, status) => (dispatch, getState, api) => {
   return api.post(`/favorite/${id}/${status}`)
     .then((response) => {
-      history.push(AppRoute.LOGIN);
       dispatch(toggleFavorite({
         id: response.data.id,
         isFavorite: response.data.is_favorite,
       }));
     })
-    .catch(() => {
+    .catch((error) => {
+      if (error.response.status === 401) {
+        history.push(AppRoute.LOGIN);
+      }
     });
 };
 
@@ -154,6 +159,16 @@ const reducer = (state = initialState, action) => {
       });
       return extend(state, {
         serverOffers: offers,
+      });
+    case ActionType.SET_REVIEWS:
+      const offersWithReviews = state.serverOffers.map((offer) => {
+        if (offer.id === action.id) {
+          offer.reviews = action.payload;
+        }
+        return offer;
+      });
+      return extend(state, {
+        serverOffers: offersWithReviews,
       });
   }
 
