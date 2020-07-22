@@ -16,3 +16,19 @@ export const AppRoute = {
   ELECT: `/elect`,
   ROOT: `/`,
 };
+
+export const ServerUrls = {
+  HOTELS: `/hotels/`,
+  FAVORITE: `/favorite/`,
+  COMMENTS: `/comments/`,
+  LOGIN: `/login/`,
+  NEARBY: `/nearby/`,
+};
+
+export const maxNumberOfReviews = 10;
+export const maxNumberOfPhotos = 6;
+export const maxNumberOfNearestOffers = 6;
+export const raitingMultiplier = 20;
+export const maxNumberOfStars = 20;
+export const favoriteStatusFalse = 0;
+export const favoriteStatusTrue = 1;

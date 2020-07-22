@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
-import {AppRoute} from "../../const.js";
+import {AppRoute, raitingMultiplier, favoriteStatusFalse} from "../../const.js";
 import {toggleFavoriteAsync} from "../../reducer/data/data.js";
 import {connect} from "react-redux";
 
@@ -9,7 +9,7 @@ const FavoriteCard = (props) => {
   const {offer} = props;
   const {name, type, price, url, starsCount, id} = offer;
 
-  const raitingPercent = `${starsCount * 20}%`;
+  const raitingPercent = `${starsCount * raitingMultiplier}%`;
 
   return (
     <article className="favorites__card place-card">
@@ -67,7 +67,7 @@ FavoriteCard.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   onFavoriteButtonClick(id) {
-    dispatch(toggleFavoriteAsync(id, 0));
+    dispatch(toggleFavoriteAsync(id, favoriteStatusFalse));
   },
 });
 

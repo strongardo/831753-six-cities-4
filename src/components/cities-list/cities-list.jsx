@@ -1,21 +1,20 @@
 import React from "react";
 import {connect} from "react-redux";
-import {setActiveCity, setOffers} from "../../reducer/condition/condition.js";
+import {setActiveCity} from "../../reducer/condition/condition.js";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import {sortOffersByType} from "../../utils.js";
-import {getCity, getCities, getOffers, getSortType} from "../../reducer/condition/selectors.js";
-import {getServerOffers} from "../../reducer/data/selectors.js";
+import {getCity, getCities} from "../../reducer/condition/selectors.js";
 
 const CitiesList = (props) => {
+  const {city, cities, onCityClick} = props;
 
-  const citiesMarkup = props.cities.map((city) => {
+  const citiesMarkup = cities.map((item) => {
     return (
-      <li key={city.id} className="locations__item">
+      <li key={item.id} className="locations__item">
         <a
-          className={clsx(`locations__item-link tabs__item`, (props.city.id === city.id) && `tabs__item--active`)}
-          onClick={() => props.onCityClick(city, props.serverOffers, props.sortType)}>
-          <span>{city.name}</span>
+          className={clsx(`locations__item-link tabs__item`, (city.id === item.id) && `tabs__item--active`)}
+          onClick={() => onCityClick(item)}>
+          <span>{item.name}</span>
         </a>
       </li>
     );
@@ -31,18 +30,6 @@ const CitiesList = (props) => {
 };
 
 CitiesList.propTypes = {
-  offers: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
-        url: PropTypes.string.isRequired,
-        starsCount: PropTypes.number.isRequired,
-        isPremium: PropTypes.bool.isRequired,
-        coordinates: PropTypes.arrayOf(PropTypes.number),
-        id: PropTypes.number.isRequired,
-      })
-  ).isRequired,
   city: PropTypes.shape({
     name: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
@@ -53,19 +40,6 @@ CitiesList.propTypes = {
         id: PropTypes.string.isRequired,
       })
   ).isRequired,
-  sortType: PropTypes.string,
-  serverOffers: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
-        url: PropTypes.string.isRequired,
-        starsCount: PropTypes.number.isRequired,
-        isPremium: PropTypes.bool.isRequired,
-        coordinates: PropTypes.arrayOf(PropTypes.number),
-        id: PropTypes.number.isRequired,
-      })
-  ).isRequired,
   onCityClick: PropTypes.func.isRequired,
 };
 
@@ -73,20 +47,12 @@ const mapStateToProps = (state) => {
   return {
     city: getCity(state),
     cities: getCities(state),
-    offers: getOffers(state),
-    sortType: getSortType(state),
-    serverOffers: getServerOffers(state),
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onCityClick(city, serverOffers, sortType) {
-    const filteredOffers = serverOffers.filter((offer) => {
-      return offer.city.name === city.name;
-    });
-    const offers = sortOffersByType(filteredOffers, sortType);
+  onCityClick(city) {
     dispatch(setActiveCity(city));
-    dispatch(setOffers(offers));
   },
 });
 

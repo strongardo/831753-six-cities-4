@@ -10,7 +10,6 @@ import Sort from "../sort/sort.jsx";
 import EmptyCitiesContainer from "../empty-cities-container/empty-cities-container.jsx";
 import {withActiveId} from "../../hocs/with-active-id/with-active-id.jsx";
 import {getCity, getOffers} from "../../reducer/condition/selectors.js";
-import {getUserStatus, getUserData} from "../../reducer/user/selectors.js";
 
 const Main = (props) => {
   const {city, offers, activeCardId, onActiveCardIdChange} = props;
@@ -93,8 +92,6 @@ const mapStateToProps = (state) => {
   return {
     city: getCity(state),
     offers: getOffers(state),
-    userStatus: getUserStatus(state),
-    userData: getUserData(state),
   };
 };
 

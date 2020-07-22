@@ -7,6 +7,8 @@ import {getFavoriteOffers} from "../../reducer/data/selectors.js";
 import clsx from "clsx";
 import {getNonRepeatingCities} from "../../utils.js";
 import FavoriteItem from "../favorite-item/favorite-item.jsx";
+import {Link} from "react-router-dom";
+import {AppRoute} from "../../const.js";
 
 class Elect extends PureComponent {
   constructor(props) {
@@ -60,9 +62,9 @@ class Elect extends PureComponent {
         <Header />
         {(isEmpty) ? emptyMarkup : getNotEmptyMarkup()}
         <footer className="footer">
-          <a className="footer__logo-link" href="main.html">
+          <Link className="footer__logo-link" to={AppRoute.ROOT}>
             <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width={64} height={33} />
-          </a>
+          </Link>
         </footer>
       </div>
     );

@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {dateToFormatString} from "../../utils.js";
+import {raitingMultiplier} from "../../const.js";
 
 const Review = (props) => {
   const {review} = props;
-  const raitingPercent = `${review.starsCount * 20}%`;
+  const raitingPercent = `${review.starsCount * raitingMultiplier}%`;
   const date = dateToFormatString(new Date(review.date));
 
   return (

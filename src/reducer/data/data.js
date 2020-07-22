@@ -1,11 +1,9 @@
 import {extend} from "../../utils.js";
 import adaptOffers from "../../adapters/offers.js";
 import adaptReviews from "../../adapters/reviews.js";
-import {setActiveCity, setOffers, setCities} from "../condition/condition.js";
+import {setActiveCity} from "../condition/condition.js";
 import {sortByDate, getNonRepeatingCities} from "../../utils.js";
-import {getSortedOffers} from "../condition/selectors.js";
-import history from "../../history.js";
-import {AppRoute} from "../../const.js";
+import {ServerUrls, maxNumberOfReviews} from "../../const.js";
 
 const initialState = {
   serverOffers: null,
@@ -18,17 +16,9 @@ const ActionType = {
   SET_SERVER_OFFERS: `SET_SERVER_OFFERS`,
   SET_IS_DATA_LOADED: `SET_IS_DATA_LOADED`,
   SET_FAVORITE_OFFERS: `SET_FAVORITE_OFFERS`,
-  TOGGLE_FAVORITE: `TOGGLE_FAVORITE`,
   SET_NEAREST_OFFERS: `SET_NEAREST_OFFERS`,
+  TOGGLE_FAVORITE: `TOGGLE_FAVORITE`,
   SET_REVIEWS: `SET_REVIEWS`,
-};
-
-const setReviews = (reviews, id) => {
-  return {
-    type: ActionType.SET_REVIEWS,
-    payload: reviews,
-    id,
-  };
 };
 
 const setServerOffers = (serverOffers) => {
@@ -52,13 +42,6 @@ const setFavoriteOffers = (offers) => {
   };
 };
 
-const toggleFavorite = (id) => {
-  return {
-    type: ActionType.TOGGLE_FAVORITE,
-    payload: id,
-  };
-};
-
 const setNearestOffers = (nearestOffers) => {
   return {
     type: ActionType.SET_NEAREST_OFFERS,
@@ -66,69 +49,75 @@ const setNearestOffers = (nearestOffers) => {
   };
 };
 
-const getNearestOffersAsync = (id) => (dispatch, getState, api) => {
-  return api.get(`/hotels/${id}/nearby`)
-    .then((response) => {
-      dispatch(setNearestOffers(adaptOffers(response.data)));
-    });
+const toggleFavorite = (id) => {
+  return {
+    type: ActionType.TOGGLE_FAVORITE,
+    payload: id,
+  };
+};
+
+const setReviews = (reviews, id) => {
+  return {
+    type: ActionType.SET_REVIEWS,
+    payload: reviews,
+    id,
+  };
 };
 
 const getOffersAsync = () => (dispatch, getState, api) => {
-  return api.get(`/hotels`)
+  return api.get(ServerUrls.HOTELS)
     .then((response) => {
       const serverOffers = adaptOffers(response.data);
       dispatch(setServerOffers(serverOffers));
 
       const cities = getNonRepeatingCities(serverOffers);
-      dispatch(setCities(cities));
-
-      const activeCity = cities[0];
-      dispatch(setActiveCity(activeCity));
-
-      const sortedOffers = getSortedOffers(getState());
-      dispatch(setOffers(sortedOffers));
+      dispatch(setActiveCity(cities[0]));
 
       dispatch(setIsDataLoaded(true));
     });
 };
 
+const getNearestOffersAsync = (id) => (dispatch, getState, api) => {
+  return api.get(`${ServerUrls.HOTELS}${id}${ServerUrls.NEARBY}`)
+    .then((response) => {
+      dispatch(setNearestOffers(adaptOffers(response.data)));
+    });
+};
+
 const getFavoriteOffersAsync = () => (dispatch, getState, api) => {
-  return api.get(`/favorite`)
+  return api.get(ServerUrls.FAVORITE)
     .then((response) => {
       dispatch(setFavoriteOffers(adaptOffers(response.data)));
     });
 };
 
 const toggleFavoriteAsync = (id, status) => (dispatch, getState, api) => {
-  return api.post(`/favorite/${id}/${status}`)
+  return api.post(`${ServerUrls.FAVORITE}${id}/${status}`)
     .then((response) => {
       dispatch(toggleFavorite({
         id: response.data.id,
         isFavorite: response.data.is_favorite,
       }));
-    })
-    .catch((error) => {
-      if (error.response.status === 401) {
-        history.push(AppRoute.LOGIN);
-      }
     });
 };
 
 const getReviewsAsync = (id) => (dispatch, getState, api) => {
-  return api.get(`/comments/${id}`)
+  return api.get(`${ServerUrls.COMMENTS}${id}`)
     .then((response) => {
       const serverReviews = adaptReviews(response.data);
-      const reviews = (serverReviews.length <= 10) ? serverReviews : serverReviews.slice(0, 10);
+      const reviews = (serverReviews.length <= maxNumberOfReviews) ? serverReviews : serverReviews.slice(0, maxNumberOfReviews);
       const sortedReviews = sortByDate(reviews);
       dispatch(setReviews(sortedReviews, id));
     });
 };
 
 const setReviewsAsync = (id, data) => (dispatch, getState, api) => {
-  return api.post(`/comments/${id}`, data)
+  return api.post(`${ServerUrls.COMMENTS}${id}`, data)
     .then((response) => {
-      const reviews = adaptReviews(response.data);
-      dispatch(setReviews(reviews, id));
+      const serverReviews = adaptReviews(response.data);
+      const reviews = (serverReviews.length <= maxNumberOfReviews) ? serverReviews : serverReviews.slice(0, maxNumberOfReviews);
+      const sortedReviews = sortByDate(reviews);
+      dispatch(setReviews(sortedReviews, id));
     });
 };
 
@@ -170,9 +159,9 @@ const reducer = (state = initialState, action) => {
       return extend(state, {
         serverOffers: offersWithReviews,
       });
-  }
 
-  return state;
+    default: return state;
+  }
 };
 
 export {

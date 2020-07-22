@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {Switch, Route, Router} from "react-router-dom";
@@ -12,38 +12,34 @@ import {getIsDataLoaded} from "../../reducer/data/selectors.js";
 import {AppRoute} from "../../const.js";
 import history from "../../history.js";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-  }
+const App = (props) => {
+  const {isDataLoaded} = props;
 
-  render() {
-    if (this.props.isDataLoaded) {
-      return (
-        <Router history={history}>
-          <Switch>
-            <Route exact path={AppRoute.ROOT} component={Main} />
-            <Route exact path={`${AppRoute.OFFER}:id`} component={OfferPage} />
-            <PrivateRoute
-              exact
-              path={AppRoute.ELECT}
-            >
-              <Elect />
-            </PrivateRoute>
-            <PrivateRoute
-              exact
-              path={AppRoute.LOGIN}
-            >
-              <Login />
-            </PrivateRoute>
-          </Switch>
-        </Router>
-      );
-    } else {
-      return <NoDataContainer />;
-    }
-  }
-}
+  return (
+    <Router history={history}>
+      {(isDataLoaded) ?
+        <Switch>
+          <Route exact path={AppRoute.ROOT} component={Main} />
+          <Route exact path={`${AppRoute.OFFER}:id`} component={OfferPage} />
+          <PrivateRoute
+            exact
+            path={AppRoute.ELECT}
+          >
+            <Elect />
+          </PrivateRoute>
+          <PrivateRoute
+            exact
+            path={AppRoute.LOGIN}
+          >
+            <Login />
+          </PrivateRoute>
+        </Switch>
+        :
+        <NoDataContainer />
+      }
+    </Router>
+  );
+};
 
 App.propTypes = {
   isDataLoaded: PropTypes.bool.isRequired,

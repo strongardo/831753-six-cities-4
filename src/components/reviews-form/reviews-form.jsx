@@ -220,7 +220,7 @@ ReviewsForm.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   onSubmit(id, starsCount, text) {
-    return dispatch(setReviewsAsync(id, {
+    dispatch(setReviewsAsync(id, {
       comment: text,
       rating: starsCount,
     }));

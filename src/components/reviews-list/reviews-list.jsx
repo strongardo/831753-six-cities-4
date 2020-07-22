@@ -10,22 +10,20 @@ class ReviewsList extends PureComponent {
   }
 
   render() {
-    const getListMarkup = () => {
-      return (
-        <ul className="reviews__list">
-          {this.props.reviews.map((review) => {
-            return <Review key={review.id} review={review} />;
-          })}
-        </ul>
-      );
-    };
-
     return (
       <>
         <h2 className="reviews__title">
           Reviews · <span className="reviews__amount">{this.props.reviews.length}</span>
         </h2>
-        {(this.props.reviews.length) ? getListMarkup() : null}
+        {(this.props.reviews.length)
+          ? (
+            <ul className="reviews__list">
+              {this.props.reviews.map((review) => {
+                return <Review key={review.id} review={review} />;
+              })}
+            </ul>
+          )
+          : null}
       </>
     );
   }
@@ -34,6 +32,7 @@ class ReviewsList extends PureComponent {
     this.props.downloadReviews(this.props.id);
   }
 
+  // || prevProps.reviews.length !== this.props.reviews.length
   componentDidUpdate(prevProps) {
     if (prevProps.id !== this.props.id) {
       this.props.downloadReviews(this.props.id);

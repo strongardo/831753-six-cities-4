@@ -1,14 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
-import {AppRoute} from "../../const.js";
+import {AppRoute, raitingMultiplier, favoriteStatusFalse, favoriteStatusTrue} from "../../const.js";
 import clsx from "clsx";
 import {toggleFavoriteAsync} from "../../reducer/data/data.js";
 import {connect} from "react-redux";
-// import {withActiveFlag} from "../../hocs/with-active-flag/with-active-flag.jsx";
 
 const OfferCard = (props) => {
-  const {offer, onCardHover} = props;
+  const {offer, onCardHover, onFavoriteButtonClick} = props;
   const {name, type, price, url, starsCount, isPremium, isFavorite, id} = offer;
 
   const handleCardMouseOver = () => {
@@ -29,7 +28,7 @@ const OfferCard = (props) => {
     </div>)
     : null;
 
-  const raitingPercent = `${starsCount * 20}%`;
+  const raitingPercent = `${Math.round(starsCount) * raitingMultiplier}%`;
 
   return (
     <article
@@ -58,10 +57,11 @@ const OfferCard = (props) => {
             className={clsx(`place-card__bookmark-button button`, isFavorite && `place-card__bookmark-button--active`)}
             type="button"
             onClick={() => {
-              const status = (isFavorite) ? 0 : 1;
-              props.onFavoriteButtonClick(offer.id, status);
+              const status = (isFavorite) ? favoriteStatusFalse : favoriteStatusTrue;
+              onFavoriteButtonClick(id, status);
             }}
           >
+            {String(isFavorite)}
             <svg className="place-card__bookmark-icon" width={18} height={19}>
               <use xlinkHref="#icon-bookmark" />
             </svg>
@@ -96,8 +96,6 @@ OfferCard.propTypes = {
   }).isRequired,
   onCardHover: PropTypes.func,
   onFavoriteButtonClick: PropTypes.func.isRequired,
-  // onActiveChange: PropTypes.func.isRequired,
-  // isActive: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
