@@ -9,6 +9,16 @@ class ReviewsList extends PureComponent {
     super(props);
   }
 
+  componentDidMount() {
+    this.props.downloadReviews(this.props.id);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.id !== this.props.id) {
+      this.props.downloadReviews(this.props.id);
+    }
+  }
+
   render() {
     return (
       <>
@@ -26,17 +36,6 @@ class ReviewsList extends PureComponent {
           : null}
       </>
     );
-  }
-
-  componentDidMount() {
-    this.props.downloadReviews(this.props.id);
-  }
-
-  // || prevProps.reviews.length !== this.props.reviews.length
-  componentDidUpdate(prevProps) {
-    if (prevProps.id !== this.props.id) {
-      this.props.downloadReviews(this.props.id);
-    }
   }
 }
 

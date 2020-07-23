@@ -1,15 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
-import {AppRoute, raitingMultiplier, favoriteStatusFalse} from "../../const.js";
+import {AppRoute, RATING_MULTIPLIER, FAVORITE_STATUS_FALSE} from "../../const.js";
 import {toggleFavoriteAsync} from "../../reducer/data/data.js";
 import {connect} from "react-redux";
+import clsx from "clsx";
 
 const FavoriteCard = (props) => {
   const {offer} = props;
-  const {name, type, price, url, starsCount, id} = offer;
+  const {name, type, price, url, starsCount, id, isFavorite} = offer;
 
-  const raitingPercent = `${starsCount * raitingMultiplier}%`;
+  const raitingPercent = `${starsCount * RATING_MULTIPLIER}%`;
 
   return (
     <article className="favorites__card place-card">
@@ -25,7 +26,8 @@ const FavoriteCard = (props) => {
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
           <button
-            className="place-card__bookmark-button place-card__bookmark-button--active button" type="button"
+            className={clsx(`place-card__bookmark-button button`, isFavorite && `place-card__bookmark-button--active`)}
+            type="button"
             onClick={() => {
               props.onFavoriteButtonClick(id);
             }}
@@ -67,9 +69,9 @@ FavoriteCard.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   onFavoriteButtonClick(id) {
-    dispatch(toggleFavoriteAsync(id, favoriteStatusFalse));
+    dispatch(toggleFavoriteAsync(id, FAVORITE_STATUS_FALSE));
   },
 });
 
 export {FavoriteCard};
-export default connect(null, mapDispatchToProps)(FavoriteCard);
+export default connect((state) => state, mapDispatchToProps)(FavoriteCard);

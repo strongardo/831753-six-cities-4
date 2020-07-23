@@ -3,7 +3,7 @@ import OffersList from "../offers-list/offers-list.jsx";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {getNearestOffersAsync} from "../../reducer/data/data.js";
-import {maxNumberOfNearestOffers} from "../../const.js";
+import {MAX_NUMBER_OF_NEAREST_OFFERS} from "../../const.js";
 
 
 class NearestList extends PureComponent {
@@ -11,9 +11,20 @@ class NearestList extends PureComponent {
     super(props);
   }
 
+  componentDidMount() {
+    this.props.downloadNearestOffers(this.props.id);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.id !== prevProps.id) {
+      this.props.downloadNearestOffers(this.props.id);
+    }
+  }
+
   render() {
     if (this.props.offers.length) {
-      const offers = this.props.offers.slice(0, maxNumberOfNearestOffers);
+      const offers = this.props.offers.slice(0, MAX_NUMBER_OF_NEAREST_OFFERS);
+
       return (
         <div className="container">
           <section className="near-places places">
@@ -30,16 +41,6 @@ class NearestList extends PureComponent {
       );
     } else {
       return null;
-    }
-  }
-
-  componentDidMount() {
-    this.props.downloadNearestOffers(this.props.id);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.id !== prevProps.id) {
-      this.props.downloadNearestOffers(this.props.id);
     }
   }
 }

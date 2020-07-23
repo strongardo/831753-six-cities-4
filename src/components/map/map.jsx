@@ -9,10 +9,6 @@ class Map extends PureComponent {
     this._mapRef = React.createRef();
   }
 
-  render() {
-    return <div id="map" ref={this._mapRef} style={{height: `100%`}} />;
-  }
-
   componentDidMount() {
     this._map = leaflet.map(this._mapRef.current, {
       center: this.props.city.coordinates,
@@ -66,6 +62,10 @@ class Map extends PureComponent {
     }
     this._layer = leaflet.layerGroup(markers);
     this._layer.addTo(this._map);
+  }
+
+  render() {
+    return <div id="map" ref={this._mapRef} style={{height: `100%`}} />;
   }
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
-import {AppRoute, raitingMultiplier, favoriteStatusFalse, favoriteStatusTrue} from "../../const.js";
+import {AppRoute, RATING_MULTIPLIER, FAVORITE_STATUS_FALSE, FAVORITE_STATUS_TRUE} from "../../const.js";
 import clsx from "clsx";
 import {toggleFavoriteAsync} from "../../reducer/data/data.js";
 import {connect} from "react-redux";
@@ -28,7 +28,7 @@ const OfferCard = (props) => {
     </div>)
     : null;
 
-  const raitingPercent = `${Math.round(starsCount) * raitingMultiplier}%`;
+  const raitingPercent = `${Math.round(starsCount) * RATING_MULTIPLIER}%`;
 
   return (
     <article
@@ -57,11 +57,10 @@ const OfferCard = (props) => {
             className={clsx(`place-card__bookmark-button button`, isFavorite && `place-card__bookmark-button--active`)}
             type="button"
             onClick={() => {
-              const status = (isFavorite) ? favoriteStatusFalse : favoriteStatusTrue;
+              const status = (isFavorite) ? FAVORITE_STATUS_FALSE : FAVORITE_STATUS_TRUE;
               onFavoriteButtonClick(id, status);
             }}
           >
-            {String(isFavorite)}
             <svg className="place-card__bookmark-icon" width={18} height={19}>
               <use xlinkHref="#icon-bookmark" />
             </svg>
@@ -105,4 +104,4 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export {OfferCard};
-export default connect(null, mapDispatchToProps)(OfferCard);
+export default connect((state) => state, mapDispatchToProps)(OfferCard);

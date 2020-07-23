@@ -9,7 +9,7 @@ import ReviewsForm from "../reviews-form/reviews-form.jsx";
 import Map from "../map/map.jsx";
 import {getUserStatus} from "../../reducer/user/selectors.js";
 import {getServerOffers, getNearestOffers} from "../../reducer/data/selectors.js";
-import {UserStatus, maxNumberOfStars, raitingMultiplier, favoriteStatusFalse, favoriteStatusTrue, maxNumberOfPhotos, maxNumberOfNearestOffers} from "../../const.js";
+import {UserStatus, MAX_NUMBER_OF_STARS, RATING_MULTIPLIER, FAVORITE_STATUS_FALSE, FAVORITE_STATUS_TRUE, MAX_NUMBER_OF_PHOTOS, MAX_NUMBER_OF_NEAREST_OFFERS} from "../../const.js";
 import {toggleFavoriteAsync} from "../../reducer/data/data.js";
 
 const OfferPage = (props) => {
@@ -45,7 +45,7 @@ const OfferPage = (props) => {
           coordinates: nearestOffer.coordinates,
           id: nearestOffer.id,
         };
-      }).slice(0, maxNumberOfNearestOffers);
+      }).slice(0, MAX_NUMBER_OF_NEAREST_OFFERS);
       markers.push({
         id,
         coordinates,
@@ -64,7 +64,7 @@ const OfferPage = (props) => {
     }
   };
 
-  const photosMarkup = urls.slice(0, maxNumberOfPhotos).map((photoUrl) => {
+  const photosMarkup = urls.slice(0, MAX_NUMBER_OF_PHOTOS).map((photoUrl) => {
     return (
       <div className="property__image-wrapper" key={photoUrl}>
         <img className="property__image" src={photoUrl} alt="Photo studio" />
@@ -94,8 +94,8 @@ const OfferPage = (props) => {
     );
   });
 
-  const starsQuantity = starsCount <= maxNumberOfStars ? starsCount : maxNumberOfStars;
-  const raitingPercent = `${Math.round(starsQuantity) * raitingMultiplier}%`;
+  const starsQuantity = starsCount <= MAX_NUMBER_OF_STARS ? starsCount : MAX_NUMBER_OF_STARS;
+  const raitingPercent = `${Math.round(starsQuantity) * RATING_MULTIPLIER}%`;
 
   return (
     <div className="page">
@@ -114,7 +114,7 @@ const OfferPage = (props) => {
                   className={clsx(`property__bookmark-button button`, isFavorite && `property__bookmark-button--active`)}
                   type="button"
                   onClick={() => {
-                    const status = (isFavorite) ? favoriteStatusFalse : favoriteStatusTrue;
+                    const status = (isFavorite) ? FAVORITE_STATUS_FALSE : FAVORITE_STATUS_TRUE;
                     onFavoriteButtonClick(id, status);
                   }}
                 >
