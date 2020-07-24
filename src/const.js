@@ -13,7 +13,7 @@ export const UserStatus = {
 export const AppRoute = {
   LOGIN: `/login`,
   OFFER: `/offer/`,
-  ELECT: `/elect`,
+  ELECT: `/favorites`,
   ROOT: `/`,
 };
 
