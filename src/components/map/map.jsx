@@ -9,10 +9,6 @@ class Map extends PureComponent {
     this._mapRef = React.createRef();
   }
 
-  render() {
-    return <div id="map" ref={this._mapRef} style={{height: `100%`}} />;
-  }
-
   componentDidMount() {
     this._map = leaflet.map(this._mapRef.current, {
       center: this.props.city.coordinates,
@@ -22,12 +18,12 @@ class Map extends PureComponent {
     });
 
     this._icon = leaflet.icon({
-      iconUrl: `img/pin.svg`,
+      iconUrl: `/img/pin.svg`,
       iconSize: [30, 30],
     });
 
     this._iconActive = leaflet.icon({
-      iconUrl: `img/pin-active.svg`,
+      iconUrl: `/img/pin-active.svg`,
       iconSize: [30, 30],
     });
 
@@ -51,17 +47,25 @@ class Map extends PureComponent {
   }
 
   _addMarkers() {
-    this._markers = [];
+    const markers = [];
 
     this.props.markers.forEach(({coordinates, id}) => {
       const marker = leaflet
         .marker(coordinates, {
           icon: id === this.props.activeMarker ? this._iconActive : this._icon,
         });
-      this._markers.push(marker);
+      markers.push(marker);
     });
 
-    this._layer = leaflet.layerGroup(this._markers).addTo(this._map);
+    if (this._layer) {
+      this._layer.remove();
+    }
+    this._layer = leaflet.layerGroup(markers);
+    this._layer.addTo(this._map);
+  }
+
+  render() {
+    return <div id="map" ref={this._mapRef} style={{height: `100%`}} />;
   }
 }
 

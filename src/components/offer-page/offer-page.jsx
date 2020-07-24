@@ -2,26 +2,26 @@ import React from "react";
 import clsx from "clsx";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import {SortType} from "../../const.js";
 import Header from "../header/header.jsx";
+import NearestList from "../nearest-list/nearest-list.jsx";
 import ReviewsList from "../reviews-list/reviews-list.jsx";
 import ReviewsForm from "../reviews-form/reviews-form.jsx";
 import Map from "../map/map.jsx";
-import OffersList from "../offers-list/offers-list.jsx";
-import {getOffers, getCity} from "../../reducer/condition/selectors.js";
 import {getUserStatus} from "../../reducer/user/selectors.js";
-import {UserStatus} from "../../const.js";
+import {getServerOffers, getNearestOffers} from "../../reducer/data/selectors.js";
+import {UserStatus, MAX_NUMBER_OF_STARS, RATING_MULTIPLIER, FAVORITE_STATUS_FALSE, FAVORITE_STATUS_TRUE, MAX_NUMBER_OF_PHOTOS, MAX_NUMBER_OF_NEAREST_OFFERS} from "../../const.js";
+import {toggleFavoriteAsync} from "../../reducer/data/data.js";
 
 const OfferPage = (props) => {
-  const currentId = Number(props.match.params.id);
-  const {offers, city, userStatus} = props;
-
-  const currentOffer = offers.find((offer) => {
-    return offer.id === currentId;
+  const {userStatus, offers, onFavoriteButtonClick} = props;
+  const offer = offers.find((serverOffer) => serverOffer.id === Number(props.match.params.id));
+  const nearestOffers = offers.filter((item) => {
+    return props.nearestOffers.some((nearestOffer) => nearestOffer.id === item.id);
   });
-  const nearestOffers = offers.filter((offer) => offer.id !== currentId);
 
   const {
+    id,
+    coordinates,
     name,
     descriptions,
     advantages,
@@ -32,16 +32,39 @@ const OfferPage = (props) => {
     starsCount,
     bedroomsCount,
     guestsCount,
+    isFavorite,
     isPremium,
     reviews,
-  } = currentOffer;
+    city,
+  } = offer;
 
-  const markers = offers.map(({coordinates, id}) => ({
-    id,
-    coordinates,
-  }));
+  const getMapMarkup = () => {
+    if (nearestOffers.length) {
+      const markers = nearestOffers.map((nearestOffer) => {
+        return {
+          coordinates: nearestOffer.coordinates,
+          id: nearestOffer.id,
+        };
+      }).slice(0, MAX_NUMBER_OF_NEAREST_OFFERS);
+      markers.push({
+        id,
+        coordinates,
+      });
+      return (
+        <section className="property__map map">
+          <Map
+            markers={markers}
+            activeMarker={id}
+            city={city}
+          />
+        </section>
+      );
+    } else {
+      return null;
+    }
+  };
 
-  const photosMarkup = urls.slice(0, 6).map((photoUrl) => {
+  const photosMarkup = urls.slice(0, MAX_NUMBER_OF_PHOTOS).map((photoUrl) => {
     return (
       <div className="property__image-wrapper" key={photoUrl}>
         <img className="property__image" src={photoUrl} alt="Photo studio" />
@@ -71,8 +94,8 @@ const OfferPage = (props) => {
     );
   });
 
-  const starsQuantity = starsCount <= 5 ? starsCount : 5;
-  const raitingPercent = `${Math.round(starsQuantity) * 20}%`;
+  const starsQuantity = starsCount <= MAX_NUMBER_OF_STARS ? starsCount : MAX_NUMBER_OF_STARS;
+  const raitingPercent = `${Math.round(starsQuantity) * RATING_MULTIPLIER}%`;
 
   return (
     <div className="page">
@@ -88,8 +111,12 @@ const OfferPage = (props) => {
               <div className="property__name-wrapper">
                 <h1 className="property__name">{name}</h1>
                 <button
-                  className="property__bookmark-button button"
+                  className={clsx(`property__bookmark-button button`, isFavorite && `property__bookmark-button--active`)}
                   type="button"
+                  onClick={() => {
+                    const status = (isFavorite) ? FAVORITE_STATUS_FALSE : FAVORITE_STATUS_TRUE;
+                    onFavoriteButtonClick(id, status);
+                  }}
                 >
                   <svg
                     className="property__bookmark-icon"
@@ -147,77 +174,81 @@ const OfferPage = (props) => {
                 <div className="property__description">{descriptionMarkup}</div>
               </div>
               <section className="property__reviews reviews">
-                <ReviewsList id={currentId} reviews={reviews} />
-                {(userStatus === UserStatus.AUTH) ? <ReviewsForm id={currentId}/> : null}
+                <ReviewsList id={id} reviews={reviews} />
+                {(userStatus === UserStatus.AUTH) ? <ReviewsForm id={id}/> : null}
               </section>
             </div>
           </div>
-          <section className="property__map map">
-            <Map
-              markers={markers}
-              activeMarker={currentId}
-              city={city}
-            />
-          </section>
+          {getMapMarkup()}
         </section>
-        <div className="container">
-          <section className="near-places places">
-            <h2 className="near-places__title">
-              Other places in the neighbourhood
-            </h2>
-            <div className="near-places__list places__list">
-              <OffersList
-                offers={nearestOffers}
-                sortType={SortType.POPULAR}
-              />
-            </div>
-          </section>
-        </div>
+        <NearestList id={id} offers={nearestOffers} />
       </main>
     </div>
   );
 };
 
 OfferPage.propTypes = {
-  city: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    coordinates: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
-    zoom: PropTypes.number.isRequired,
-  }),
-  offers: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    descriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
-    advantages: PropTypes.arrayOf(PropTypes.string).isRequired,
-    owner: PropTypes.shape({
-      url: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      isSuper: PropTypes.bool.isRequired,
-    }).isRequired,
-    type: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    urls: PropTypes.arrayOf(PropTypes.string).isRequired,
-    starsCount: PropTypes.number.isRequired,
-    bedroomsCount: PropTypes.number.isRequired,
-    guestsCount: PropTypes.number.isRequired,
-    isPremium: PropTypes.bool.isRequired,
-    coordinates: PropTypes.arrayOf(PropTypes.number),
-    id: PropTypes.number.isRequired,
-  })).isRequired,
   userStatus: PropTypes.string.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }),
   }).isRequired,
+  onFavoriteButtonClick: PropTypes.func.isRequired,
+  nearestOffers: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        url: PropTypes.string.isRequired,
+        starsCount: PropTypes.number.isRequired,
+        isPremium: PropTypes.bool.isRequired,
+        id: PropTypes.number.isRequired,
+      })
+  ).isRequired,
+  offers: PropTypes.arrayOf(
+      PropTypes.shape({
+        city: PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          coordinates: PropTypes.arrayOf(PropTypes.number.isRequired).isRequired,
+          zoom: PropTypes.number.isRequired,
+        }),
+        name: PropTypes.string.isRequired,
+        descriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+        advantages: PropTypes.arrayOf(PropTypes.string).isRequired,
+        owner: PropTypes.shape({
+          url: PropTypes.string.isRequired,
+          name: PropTypes.string.isRequired,
+          isSuper: PropTypes.bool.isRequired,
+        }).isRequired,
+        type: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        urls: PropTypes.arrayOf(PropTypes.string).isRequired,
+        starsCount: PropTypes.number.isRequired,
+        bedroomsCount: PropTypes.number.isRequired,
+        guestsCount: PropTypes.number.isRequired,
+        isPremium: PropTypes.bool.isRequired,
+        isFavorite: PropTypes.bool.isRequired,
+        coordinates: PropTypes.arrayOf(PropTypes.number),
+        id: PropTypes.number.isRequired,
+        reviews: PropTypes.array.isRequired,
+      })
+  ).isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
-    offers: getOffers(state),
-    city: getCity(state),
+    offers: getServerOffers(state),
+    nearestOffers: getNearestOffers(state),
     userStatus: getUserStatus(state),
   };
 };
 
+const mapDispatchToProps = (dispatch) => ({
+  onFavoriteButtonClick(id, status) {
+    dispatch(toggleFavoriteAsync(id, status));
+  },
+});
+
 export {OfferPage};
-export default connect(mapStateToProps)(OfferPage);
+export default connect(mapStateToProps, mapDispatchToProps)(OfferPage);

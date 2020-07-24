@@ -2,33 +2,33 @@ import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import {connect} from "react-redux";
-import {setSortType, setOffers} from "../../reducer/condition/condition.js";
+import {setSortType} from "../../reducer/condition/condition.js";
 import {SortType} from "../../const.js";
-import {sortOffersByType} from "../../utils.js";
 import {withActiveFlag} from "../../hocs/with-active-flag/with-active-flag.jsx";
-import {getSortType, getOffers} from "../../reducer/condition/selectors.js";
+import {getSortType} from "../../reducer/condition/selectors.js";
 
 const Sort = (props) => {
+  const {sortType, onActiveChange, isActive, onLiClick} = props;
 
   const sortTypes = Object.values(SortType);
 
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span className="places__sorting-type" tabIndex={0} onClick={props.onActiveChange}>
-        {props.sortType}
+      <span className="places__sorting-type" tabIndex={0} onClick={onActiveChange}>
+        {sortType}
         <svg className="places__sorting-arrow" width={7} height={4}>
           <use xlinkHref="#icon-arrow-select" />
         </svg>
       </span>
-      <ul className={clsx(`places__options places__options--custom`, (props.isActive) && `places__options--opened`)}>
+      <ul className={clsx(`places__options places__options--custom`, (isActive) && `places__options--opened`)}>
         {sortTypes.map((type) => {
           return (
             <li
               key={type}
-              className={clsx(`places__option`, (props.sortType === type) && `places__option--active`)}
+              className={clsx(`places__option`, (sortType === type) && `places__option--active`)}
               onClick={() => {
-                props.onLiClick(type, props.sortType, props.offers);
+                onLiClick(type, sortType);
               }}
               tabIndex={0}>
               {type}
@@ -36,14 +36,6 @@ const Sort = (props) => {
           );
         })}
       </ul>
-      {/*
-      <select class="places__sorting-type" id="places-sorting">
-        <option class="places__option" value="popular" selected="">Popular</option>
-        <option class="places__option" value="to-high">Price: low to high</option>
-        <option class="places__option" value="to-low">Price: high to low</option>
-        <option class="places__option" value="top-rated">Top rated first</option>
-      </select>
-      */}
     </form>
   );
 };
@@ -52,34 +44,19 @@ Sort.propTypes = {
   sortType: PropTypes.string.isRequired,
   onActiveChange: PropTypes.func.isRequired,
   isActive: PropTypes.bool.isRequired,
-  offers: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
-        url: PropTypes.string.isRequired,
-        starsCount: PropTypes.number.isRequired,
-        isPremium: PropTypes.bool.isRequired,
-        coordinates: PropTypes.arrayOf(PropTypes.number),
-        id: PropTypes.number.isRequired,
-      })
-  ).isRequired,
   onLiClick: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
     sortType: getSortType(state),
-    offers: getOffers(state),
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onLiClick(type, sortType, propsOffers) {
+  onLiClick(type, sortType) {
     if (sortType !== type) {
-      const offers = sortOffersByType(propsOffers, type);
       dispatch(setSortType(type));
-      dispatch(setOffers(offers));
     }
   },
 });

@@ -5,7 +5,7 @@ const adaptOffers = (serverOffers) => {
       descriptions: [offer.description],
       type: offer.type,
       owner: {
-        url: offer.host.avatar_url,
+        url: `/${offer.host.avatar_url}`,
         name: offer.host.name,
         isSuper: offer.host.is_pro,
       },
@@ -17,6 +17,7 @@ const adaptOffers = (serverOffers) => {
       bedroomsCount: offer.bedrooms,
       guestsCount: offer.max_adults,
       isPremium: offer.is_premium,
+      isFavorite: offer.is_favorite,
       coordinates: [offer.location.latitude, offer.location.longitude],
       city: {
         name: offer.city.name,

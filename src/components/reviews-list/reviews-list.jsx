@@ -9,27 +9,6 @@ class ReviewsList extends PureComponent {
     super(props);
   }
 
-  render() {
-    const getListMarkup = () => {
-      return (
-        <ul className="reviews__list">
-          {this.props.reviews.map((review) => {
-            return <Review key={review.id} review={review} />;
-          })}
-        </ul>
-      );
-    };
-
-    return (
-      <>
-        <h2 className="reviews__title">
-          Reviews · <span className="reviews__amount">{this.props.reviews.length}</span>
-        </h2>
-        {(this.props.reviews.length) ? getListMarkup() : null}
-      </>
-    );
-  }
-
   componentDidMount() {
     this.props.downloadReviews(this.props.id);
   }
@@ -38,6 +17,25 @@ class ReviewsList extends PureComponent {
     if (prevProps.id !== this.props.id) {
       this.props.downloadReviews(this.props.id);
     }
+  }
+
+  render() {
+    return (
+      <>
+        <h2 className="reviews__title">
+          Reviews · <span className="reviews__amount">{this.props.reviews.length}</span>
+        </h2>
+        {(this.props.reviews.length)
+          ? (
+            <ul className="reviews__list">
+              {this.props.reviews.map((review) => {
+                return <Review key={review.id} review={review} />;
+              })}
+            </ul>
+          )
+          : null}
+      </>
+    );
   }
 }
 

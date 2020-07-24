@@ -4,7 +4,6 @@ export const dateToFormatString = (date) =>
   new Intl.DateTimeFormat(`en-US`, {
     year: `numeric`,
     month: `long`,
-    day: `numeric`,
   }).format(date);
 
 export const sortByDate = (array) => {
@@ -34,4 +33,15 @@ export const sortOffersByType = (offers, sortType) => {
       break;
   }
   return sortedOffers;
+};
+
+export const getNonRepeatingCities = (arr) => {
+  const nonRepeatingCities = arr.reduce(
+      (acc, {city}) => {
+        acc[city.name] = city;
+        return acc;
+      }
+      , {});
+
+  return Object.values(nonRepeatingCities);
 };

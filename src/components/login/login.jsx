@@ -8,7 +8,6 @@ const Login = (props) => {
   const loginRef = createRef();
   const passwordRef = createRef();
   const onSubmit = props.onSubmit;
-  const push = props.history.push;
 
   return (
     <div className="page page--gray page--login">
@@ -22,7 +21,7 @@ const Login = (props) => {
               method="post"
               onSubmit={(evt) => {
                 evt.preventDefault();
-                onSubmit(loginRef.current.value, passwordRef.current.value, push);
+                onSubmit(loginRef.current.value, passwordRef.current.value);
               }}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
@@ -50,17 +49,14 @@ const Login = (props) => {
 
 Login.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onSubmit(login, password, push) {
+  onSubmit(login, password) {
     dispatch(setUserStatusAsync({
       login,
       password,
-    }, push));
+    }));
   },
 });
 

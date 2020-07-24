@@ -17,9 +17,10 @@ export const createAPI = (onUnauthorized) => {
 
   const onFail = (err) => {
     const {response} = err;
+    const url = err.response.config.url;
 
     if (response.status === Error.UNAUTHORIZED) {
-      onUnauthorized();
+      onUnauthorized(url);
 
       // Бросаем ошибку, потому что нам важно прервать цепочку промисов после запроса авторизации.
       // Запрос авторизации - это особый случай и важно дать понять приложению, что запрос был неудачным.

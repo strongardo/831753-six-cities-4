@@ -9,10 +9,14 @@ import App from "./components/app/app.jsx";
 import {createAPI} from "./api.js";
 import {getOffersAsync} from "./reducer/data/data.js";
 import {getUserStatusAsync, setUserStatus} from "./reducer/user/user.js";
-import {UserStatus} from "./const.js";
+import {UserStatus, ServerUrls, AppRoute} from "./const.js";
+import history from "./history.js";
 
-const onUnauthorized = () => {
+const onUnauthorized = (url) => {
   store.dispatch(setUserStatus(UserStatus.NO_AUTH));
+  if (url !== ServerUrls.LOGIN) {
+    history.push(AppRoute.LOGIN);
+  }
 };
 
 const api = createAPI(onUnauthorized);

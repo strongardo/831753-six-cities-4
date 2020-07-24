@@ -16,3 +16,23 @@ export const AppRoute = {
   ELECT: `/elect`,
   ROOT: `/`,
 };
+
+export const ServerUrls = {
+  HOTELS: `/hotels/`,
+  FAVORITE: `/favorite/`,
+  COMMENTS: `/comments/`,
+  LOGIN: `/login/`,
+  NEARBY: `/nearby/`,
+};
+
+export const MAX_NUMBER_OF_REVIEWS = 10;
+export const MAX_NUMBER_OF_PHOTOS = 6;
+export const MAX_NUMBER_OF_NEAREST_OFFERS = 6;
+export const RATING_MULTIPLIER = 20;
+export const FAVORITE_STATUS_FALSE = 0;
+export const FAVORITE_STATUS_TRUE = 1;
+export const AUXILIARY_NUMBER_FOR_RAITING = 6;
+export const MAX_NUMBER_OF_STARS = 5;
+export const MAX_NUMBER_OF_CHARACTERS = 300;
+export const MIN_NUMBER_OF_CHARACTERS = 50;
+export const NUMBER_FOR_LACK_OF_RATING = 0;
