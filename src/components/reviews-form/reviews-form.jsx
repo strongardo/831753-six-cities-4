@@ -24,9 +24,8 @@ const ReviewsForm = (props) => {
     sendReview,
   } = props;
 
-  const onSuccess = (form) => {
+  const onSuccess = () => {
     allDisabledChange();
-    form.reset();
     onTextAriaChange(``);
     onRadioChange(AUXILIARY_NUMBER_FOR_RAITING);
     onErrorForAlert(false);
@@ -41,14 +40,12 @@ const ReviewsForm = (props) => {
     evt.preventDefault();
     allDisabledChange();
 
-    const form = evt.target;
-
     sendReview(starsCount, text)
       .then(() => {
-        onSuccess(form);
+        onSuccess();
       })
       .catch(() => {
-        onError(form);
+        onError();
       });
   };
 
@@ -73,6 +70,7 @@ const ReviewsForm = (props) => {
               onChange={(evt) => {
                 onRadioChange(evt.target.value);
               }}
+              checked={AUXILIARY_NUMBER_FOR_RAITING - starsCount === i + 1}
             />
             <label
               htmlFor={`${i}-stars`}
