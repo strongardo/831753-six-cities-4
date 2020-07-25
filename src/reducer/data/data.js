@@ -139,10 +139,7 @@ const reducer = (state = initialState, action) => {
 
 export {
   reducer,
-<<<<<<< HEAD
   ActionType,
-=======
->>>>>>> master
   getOffersAsync,
   getReviewsAsync,
   setReviewsAsync,
