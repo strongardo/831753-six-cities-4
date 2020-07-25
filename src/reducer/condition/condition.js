@@ -40,4 +40,8 @@ const reducer = (state = initialState, action) => {
   return state;
 };
 
+<<<<<<< HEAD
 export {reducer, ActionType, setActiveCity, setSortType};
+=======
+export {reducer, setActiveCity, setSortType};
+>>>>>>> master
