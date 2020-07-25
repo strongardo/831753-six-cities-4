@@ -9,12 +9,12 @@ import App from "./components/app/app.jsx";
 import {createAPI} from "./api.js";
 import {getOffersAsync} from "./reducer/data/data.js";
 import {getUserStatusAsync, setUserStatus} from "./reducer/user/user.js";
-import {UserStatus, ServerUrls, AppRoute} from "./const.js";
+import {UserStatus, ServerUrl, AppRoute} from "./const.js";
 import history from "./history.js";
 
 const onUnauthorized = (url) => {
   store.dispatch(setUserStatus(UserStatus.NO_AUTH));
-  if (url !== ServerUrls.LOGIN) {
+  if (url !== ServerUrl.LOGIN) {
     history.push(AppRoute.LOGIN);
   }
 };

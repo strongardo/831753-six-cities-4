@@ -3,7 +3,7 @@ import adaptOffers from "../../adapters/offers.js";
 import adaptReviews from "../../adapters/reviews.js";
 import {setActiveCity} from "../condition/condition.js";
 import {sortByDate, getNonRepeatingCities} from "../../utils.js";
-import {ServerUrls, MAX_NUMBER_OF_REVIEWS} from "../../const.js";
+import {ServerUrl, MAX_NUMBER_OF_REVIEWS} from "../../const.js";
 import {getServerOffers} from "./selectors.js";
 
 const initialState = {
@@ -49,7 +49,7 @@ const setNearestOffers = (nearestOffers) => {
 };
 
 const getOffersAsync = () => (dispatch, getState, api) => {
-  return api.get(ServerUrls.HOTELS)
+  return api.get(ServerUrl.HOTELS)
     .then((response) => {
       const serverOffers = adaptOffers(response.data);
       dispatch(setServerOffers(serverOffers));
@@ -62,21 +62,21 @@ const getOffersAsync = () => (dispatch, getState, api) => {
 };
 
 const getNearestOffersAsync = (id) => (dispatch, getState, api) => {
-  return api.get(`${ServerUrls.HOTELS}${id}${ServerUrls.NEARBY}`)
+  return api.get(`${ServerUrl.HOTELS}${id}${ServerUrl.NEARBY}`)
     .then((response) => {
       dispatch(setNearestOffers(adaptOffers(response.data)));
     });
 };
 
 const getFavoriteOffersAsync = () => (dispatch, getState, api) => {
-  return api.get(ServerUrls.FAVORITE)
+  return api.get(ServerUrl.FAVORITE)
     .then((response) => {
       dispatch(setFavoriteOffers(adaptOffers(response.data)));
     });
 };
 
 const toggleFavoriteAsync = (id, status) => (dispatch, getState, api) => {
-  return api.post(`${ServerUrls.FAVORITE}${id}/${status}`)
+  return api.post(`${ServerUrl.FAVORITE}${id}/${status}`)
     .then((response) => {
       const offers = getServerOffers(getState()).map((offer) => {
         if (offer.id === id) {
@@ -90,11 +90,13 @@ const toggleFavoriteAsync = (id, status) => (dispatch, getState, api) => {
 
 const onDownloadReviews = (data, id, dispatch, getState) => {
   const serverReviews = adaptReviews(data);
-  const reviews = (serverReviews.length <= MAX_NUMBER_OF_REVIEWS) ? serverReviews : serverReviews.slice(0, MAX_NUMBER_OF_REVIEWS);
-  const sortedReviews = sortByDate(reviews);
+  const sortedReviews = sortByDate(serverReviews);
+  const reviews = (sortedReviews.length <= MAX_NUMBER_OF_REVIEWS)
+    ? sortedReviews
+    : sortedReviews.slice(0, MAX_NUMBER_OF_REVIEWS);
   const offersWithReviews = getServerOffers(getState()).map((offer) => {
     if (offer.id === id) {
-      offer.reviews = sortedReviews;
+      offer.reviews = reviews;
     }
     return offer;
   });
@@ -102,14 +104,14 @@ const onDownloadReviews = (data, id, dispatch, getState) => {
 };
 
 const getReviewsAsync = (id) => (dispatch, getState, api) => {
-  return api.get(`${ServerUrls.COMMENTS}${id}`)
+  return api.get(`${ServerUrl.COMMENTS}${id}`)
     .then((response) => {
       onDownloadReviews(response.data, id, dispatch, getState);
     });
 };
 
 const setReviewsAsync = (id, data) => (dispatch, getState, api) => {
-  return api.post(`${ServerUrls.COMMENTS}${id}`, data)
+  return api.post(`${ServerUrl.COMMENTS}${id}`, data)
     .then((response) => {
       onDownloadReviews(response.data, id, dispatch, getState);
     });

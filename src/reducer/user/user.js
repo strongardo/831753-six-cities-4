@@ -1,7 +1,7 @@
 import {extend} from "../../utils.js";
 import adaptUserData from "../../adapters/user.js";
 import {UserStatus} from "../../const.js";
-import {AppRoute, ServerUrls} from "../../const.js";
+import {AppRoute, ServerUrl} from "../../const.js";
 import history from "../../history.js";
 
 const initialState = {
@@ -40,7 +40,7 @@ const onSuccess = (response, dispatch) => {
 };
 
 const getUserStatusAsync = () => (dispatch, getState, api) => {
-  return api.get(ServerUrls.LOGIN)
+  return api.get(ServerUrl.LOGIN)
     .then((response) => {
       onSuccess(response, dispatch);
     })
@@ -50,7 +50,7 @@ const getUserStatusAsync = () => (dispatch, getState, api) => {
 };
 
 const setUserStatusAsync = (userData) => (dispatch, getState, api) => {
-  return api.post(ServerUrls.LOGIN, {
+  return api.post(ServerUrl.LOGIN, {
     email: userData.login,
     password: userData.password,
   })

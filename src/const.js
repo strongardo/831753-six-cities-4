@@ -17,7 +17,7 @@ export const AppRoute = {
   ROOT: `/`,
 };
 
-export const ServerUrls = {
+export const ServerUrl = {
   HOTELS: `/hotels/`,
   FAVORITE: `/favorite/`,
   COMMENTS: `/comments/`,
