@@ -287,7 +287,16 @@ OfferPage.propTypes = {
         isFavorite: PropTypes.bool.isRequired,
         coordinates: PropTypes.arrayOf(PropTypes.number),
         id: PropTypes.number.isRequired,
-        reviews: PropTypes.array.isRequired,
+        reviews: PropTypes.arrayOf(
+            PropTypes.shape({
+              text: PropTypes.string.isRequired,
+              starsCount: PropTypes.number.isRequired,
+              url: PropTypes.string.isRequired,
+              name: PropTypes.string.isRequired,
+              date: PropTypes.string.isRequired,
+              id: PropTypes.number.isRequired,
+            })
+        ).isRequired,
       })
   ).isRequired,
   downloadReviews: PropTypes.func.isRequired,
