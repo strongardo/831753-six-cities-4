@@ -2,8 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Route, Redirect} from "react-router-dom";
 import {connect} from "react-redux";
-import {AppRoute} from "../../const.js";
-import {UserStatus} from "../../const.js";
+import {AppRoute, UserStatus} from "../../const.js";
 import {getUserStatus} from "../../reducer/user/selectors.js";
 
 

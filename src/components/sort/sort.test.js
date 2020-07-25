@@ -6,7 +6,7 @@ it(`Should Sort render correctly`, () => {
   const tree = renderer
     .create(
         <Sort
-          onSortTypeChange={() => {}}
+          onLiClick={() => {}}
           sortType={`Popular`}
           isActive={false}
           onActiveChange={() => {}}

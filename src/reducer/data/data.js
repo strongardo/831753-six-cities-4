@@ -139,6 +139,7 @@ const reducer = (state = initialState, action) => {
 
 export {
   reducer,
+  ActionType,
   getOffersAsync,
   getReviewsAsync,
   setReviewsAsync,

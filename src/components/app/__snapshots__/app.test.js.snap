@@ -17,13 +17,15 @@ exports[`Render App 1`] = `
           className="header__left"
         >
           <a
-            className="header__logo-link header__logo-link--active"
+            className="header__logo-link"
+            href="/"
+            onClick={[Function]}
           >
             <img
               alt="6 cities logo"
               className="header__logo"
               height={41}
-              src="img/logo.svg"
+              src="/img/logo.svg"
               width={81}
             />
           </a>
@@ -39,7 +41,8 @@ exports[`Render App 1`] = `
             >
               <a
                 className="header__nav-link header__nav-link--profile"
-                href="#"
+                href="/favorites"
+                onClick={[Function]}
               >
                 <div
                   className="header__avatar-wrapper user__avatar-wrapper"
@@ -47,7 +50,7 @@ exports[`Render App 1`] = `
                 <span
                   className="header__user-name user__name"
                 >
-                  Oliver.conner@gmail.com
+                  mail@ln.kg
                 </span>
               </a>
             </li>
@@ -77,11 +80,11 @@ exports[`Render App 1`] = `
             className="locations__item"
           >
             <a
-              className="locations__item-link tabs__item"
+              className="locations__item-link tabs__item tabs__item--active"
               onClick={[Function]}
             >
               <span>
-                Amsterdam
+                Paris
               </span>
             </a>
           </li>
@@ -105,7 +108,7 @@ exports[`Render App 1`] = `
           <b
             className="places__found"
           >
-            1 places to stay in Amsterdam
+            1 places to stay in Paris
           </b>
           <form
             action="#"
@@ -185,13 +188,15 @@ exports[`Render App 1`] = `
                 className="cities__image-wrapper place-card__image-wrapper"
               >
                 <a
-                  href="#"
+                  className="place-card__link"
+                  href="/offer/1"
+                  onClick={[Function]}
                 >
                   <img
                     alt="Place image"
                     className="place-card__image"
                     height={200}
-                    src="img/apartment-01.jpg"
+                    src="https://htmlacademy-react-3.appspot.com/six-cities/static/hotel/12.jpg"
                     width={260}
                   />
                 </a>
@@ -208,7 +213,8 @@ exports[`Render App 1`] = `
                     <b
                       className="place-card__price-value"
                     >
-                      128
+                      €
+                      813
                     </b>
                     <span
                       className="place-card__price-text"
@@ -217,7 +223,8 @@ exports[`Render App 1`] = `
                     </span>
                   </div>
                   <button
-                    className="place-card__bookmark-button button"
+                    className="place-card__bookmark-button button place-card__bookmark-button--active"
+                    onClick={[Function]}
                     type="button"
                   >
                     <svg
@@ -245,7 +252,7 @@ exports[`Render App 1`] = `
                     <span
                       style={
                         Object {
-                          "width": "74%",
+                          "width": "80%",
                         }
                       }
                     />
@@ -261,16 +268,16 @@ exports[`Render App 1`] = `
                 >
                   <a
                     className="place-card__link"
-                    href="#"
+                    href="/offer/1"
                     onClick={[Function]}
                   >
-                    Beautiful & luxurious apartment at great location
+                    The house among olive
                   </a>
                 </h2>
                 <p
                   className="place-card__type"
                 >
-                  Apartment
+                  house
                 </p>
               </div>
             </article>

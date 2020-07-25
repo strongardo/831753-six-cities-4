@@ -8,7 +8,7 @@ const review = {
   starsCount: 1,
   url: `img/avatar-max.jpg`,
   name: `Max`,
-  date: new Date(`2017-12-12`),
+  date: `2019-05-08T14:13:56.569Z`,
   id: 1,
 };
 
