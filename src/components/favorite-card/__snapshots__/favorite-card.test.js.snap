@@ -1,20 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Should OffersList render correctly 1`] = `
+exports[`Should FavoriteCard render correctly 1`] = `
 <article
-  className="cities__place-card place-card"
-  onMouseOut={[Function]}
-  onMouseOver={[Function]}
+  className="favorites__card place-card"
 >
   <div
-    className="place-card__mark"
-  >
-    <span>
-      Premium
-    </span>
-  </div>
-  <div
-    className="cities__image-wrapper place-card__image-wrapper"
+    className="favorites__image-wrapper place-card__image-wrapper"
   >
     <a
       className="place-card__link"
@@ -24,14 +15,14 @@ exports[`Should OffersList render correctly 1`] = `
       <img
         alt="Place image"
         className="place-card__image"
-        height={200}
+        height={110}
         src="https://htmlacademy-react-3.appspot.com/six-cities/static/hotel/12.jpg"
-        width={260}
+        width={150}
       />
     </a>
   </div>
   <div
-    className="place-card__info"
+    className="favorites__card-info place-card__info"
   >
     <div
       className="place-card__price-wrapper"
@@ -68,7 +59,7 @@ exports[`Should OffersList render correctly 1`] = `
         <span
           className="visually-hidden"
         >
-          To bookmarks
+          In bookmarks
         </span>
       </button>
     </div>
@@ -81,7 +72,7 @@ exports[`Should OffersList render correctly 1`] = `
         <span
           style={
             Object {
-              "width": "80%",
+              "width": "84%",
             }
           }
         />

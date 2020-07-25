@@ -5,7 +5,7 @@ import {CitiesList} from "./cities-list.jsx";
 const cities = [
   {
     name: `Paris`,
-    id: 1,
+    id: `Paris`,
   },
 ];
 
@@ -14,7 +14,7 @@ it(`Should CitiesList render correctly`, () => {
     .create(<CitiesList
       city={cities[0]}
       cities={cities}
-      setActiveCity={() => {}}
+      onCityClick={() => {}}
     />)
     .toJSON();
 

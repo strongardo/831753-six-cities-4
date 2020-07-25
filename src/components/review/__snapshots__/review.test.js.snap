@@ -55,9 +55,8 @@ exports[`Should Review render correctly 1`] = `
     </p>
     <time
       className="reviews__time"
-      dateTime="2019-04-24"
     >
-      December 12, 2017
+      May 2019
     </time>
   </div>
 </li>

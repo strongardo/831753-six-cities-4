@@ -78,4 +78,4 @@ const reducer = (state = initialState, action) => {
   return state;
 };
 
-export {reducer, setUserStatus, getUserStatusAsync, setUserStatusAsync};
+export {reducer, ActionType, setUserStatus, getUserStatusAsync, setUserStatusAsync};
