@@ -5,7 +5,7 @@ import {composeWithDevTools} from "redux-devtools-extension";
 import {Provider} from "react-redux";
 import thunk from "redux-thunk";
 import reducer from "./reducer/reducer.js";
-import App from "./components/app/app.jsx";
+import App from "./app.jsx";
 import {createAPI} from "./api.js";
 import {getOffersAsync} from "./reducer/data/data.js";
 import {getUserStatusAsync, setUserStatus} from "./reducer/user/user.js";

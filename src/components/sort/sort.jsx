@@ -1,21 +1,25 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import {connect} from "react-redux";
 import {setSortType} from "../../reducer/condition/condition.js";
 import {SortType} from "../../const.js";
-import {withActiveFlag} from "../../hocs/with-active-flag/with-active-flag.jsx";
 import {getSortType} from "../../reducer/condition/selectors.js";
 
 const Sort = (props) => {
-  const {sortType, onActiveChange, isActive, onLiClick} = props;
-
+  const {sortType, onLiClick} = props;
   const sortTypes = Object.values(SortType);
+
+  const [isActive, setIsActive] = useState(false);
 
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span className="places__sorting-type" tabIndex={0} onClick={onActiveChange}>
+      <span className="places__sorting-type" tabIndex={0} onClick={
+        () => {
+          setIsActive(!isActive);
+        }
+      }>
         {sortType}
         <svg className="places__sorting-arrow" width={7} height={4}>
           <use xlinkHref="#icon-arrow-select" />
@@ -42,8 +46,6 @@ const Sort = (props) => {
 
 Sort.propTypes = {
   sortType: PropTypes.string.isRequired,
-  onActiveChange: PropTypes.func.isRequired,
-  isActive: PropTypes.bool.isRequired,
   onLiClick: PropTypes.func.isRequired,
 };
 
@@ -62,4 +64,4 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export {Sort};
-export default withActiveFlag(connect(mapStateToProps, mapDispatchToProps)(Sort));
+export default connect(mapStateToProps, mapDispatchToProps)(Sort);

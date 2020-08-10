@@ -2,7 +2,7 @@ import React, {createRef} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {setUserStatusAsync} from "../../reducer/user/user.js";
-import Header from "../header/header.jsx";
+import Header from "../../components/header/header.jsx";
 
 const Login = (props) => {
   const loginRef = createRef();

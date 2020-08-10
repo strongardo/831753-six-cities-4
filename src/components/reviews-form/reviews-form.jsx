@@ -1,8 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import {connect} from "react-redux";
 import {setReviewsAsync} from "../../reducer/data/data.js";
 import PropTypes from "prop-types";
-import {withFormLogic} from "../../hocs/with-form-logic/with-form-logic.jsx";
 import {
   AUXILIARY_NUMBER_FOR_RAITING,
   MAX_NUMBER_OF_STARS,
@@ -13,32 +12,29 @@ import {
 
 const ReviewsForm = (props) => {
   const {
-    text,
-    starsCount,
-    allDisabled,
-    isError,
-    onTextAriaChange,
-    onRadioChange,
-    allDisabledChange,
-    onErrorForAlert,
     sendReview,
   } = props;
 
+  const [text, setText] = useState(``);
+  const [starsCount, setStarsCount] = useState(NUMBER_FOR_LACK_OF_RATING);
+  const [allDisabled, setAllDisabled] = useState(false);
+  const [isError, setIsError] = useState(false);
+
   const onSuccess = () => {
-    allDisabledChange();
-    onTextAriaChange(``);
-    onRadioChange(AUXILIARY_NUMBER_FOR_RAITING);
-    onErrorForAlert(false);
+    setAllDisabled(false);
+    setText(``);
+    setStarsCount(NUMBER_FOR_LACK_OF_RATING);
+    setIsError(false);
   };
 
   const onError = () => {
-    allDisabledChange();
-    onErrorForAlert(true);
+    setAllDisabled(false);
+    setIsError(true);
   };
 
   const onSubmit = (evt) => {
     evt.preventDefault();
-    allDisabledChange();
+    setAllDisabled(true);
 
     sendReview(starsCount, text)
       .then(() => {
@@ -68,7 +64,7 @@ const ReviewsForm = (props) => {
               type="radio"
               disabled={allDisabled}
               onChange={(evt) => {
-                onRadioChange(evt.target.value);
+                setStarsCount(AUXILIARY_NUMBER_FOR_RAITING - evt.target.value);
               }}
               checked={AUXILIARY_NUMBER_FOR_RAITING - starsCount === i + 1}
             />
@@ -92,7 +88,7 @@ const ReviewsForm = (props) => {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={text}
         onChange={(evt) => {
-          onTextAriaChange(evt.target.value);
+          setText(evt.target.value);
         }}
       />
       <div className="reviews__button-wrapper">
@@ -120,14 +116,6 @@ const ReviewsForm = (props) => {
 };
 
 ReviewsForm.propTypes = {
-  text: PropTypes.string.isRequired,
-  starsCount: PropTypes.number.isRequired,
-  allDisabled: PropTypes.bool.isRequired,
-  isError: PropTypes.bool.isRequired,
-  onTextAriaChange: PropTypes.func.isRequired,
-  onRadioChange: PropTypes.func.isRequired,
-  allDisabledChange: PropTypes.func.isRequired,
-  onErrorForAlert: PropTypes.func.isRequired,
   sendReview: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
 };
@@ -144,4 +132,4 @@ const mapDispatchToProps = (dispatch, props) => ({
 });
 
 export {ReviewsForm};
-export default withFormLogic(connect(null, mapDispatchToProps)(ReviewsForm));
+export default connect(null, mapDispatchToProps)(ReviewsForm);

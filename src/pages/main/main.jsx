@@ -1,23 +1,32 @@
-import React from "react";
+import React, {useState} from "react";
 import clsx from "clsx";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import Header from "../header/header.jsx";
-import CitiesList from "../cities-list/cities-list.jsx";
-import OffersList from "../offers-list/offers-list.jsx";
-import Map from "../map/map.jsx";
-import Sort from "../sort/sort.jsx";
-import EmptyCitiesContainer from "../empty-cities-container/empty-cities-container.jsx";
-import {withActiveId} from "../../hocs/with-active-id/with-active-id.jsx";
-import {getCity, getOffers} from "../../reducer/condition/selectors.js";
+import Header from "../../components/header/header.jsx";
+import CitiesList from "../../components/cities-list/cities-list.jsx";
+import OffersList from "../../components/offers-list/offers-list.jsx";
+import Map from "../../components/map/map.jsx";
+import Sort from "../../components/sort/sort.jsx";
+import EmptyCitiesContainer from "../../components/empty-cities-container/empty-cities-container.jsx";
+import {getCity, getOffers} from "../../components/../reducer/condition/selectors.js";
 
 const Main = (props) => {
-  const {city, offers, activeCardId, onActiveCardIdChange} = props;
+  const {city, offers} = props;
+
+  const [activeCardId, setActiveCardId] = useState();
 
   const markers = offers.map(({coordinates, id}) => ({
     coordinates,
     id,
   }));
+
+  const onActiveCardIdChange = (id) => {
+    if (activeCardId) {
+      setActiveCardId(0);
+    } else {
+      setActiveCardId(id);
+    }
+  };
 
   const citiesContainerMarkup = offers.length
     ? (<div className="cities__places-container container">
@@ -84,8 +93,6 @@ Main.propTypes = {
         id: PropTypes.number.isRequired,
       })
   ).isRequired,
-  activeCardId: PropTypes.number.isRequired,
-  onActiveCardIdChange: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -96,4 +103,4 @@ const mapStateToProps = (state) => {
 };
 
 export {Main};
-export default withActiveId(connect(mapStateToProps)(Main));
+export default connect(mapStateToProps)(Main);

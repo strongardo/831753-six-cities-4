@@ -22,7 +22,7 @@ exports[`Should ReviewsForm render correctly 1`] = `
     className="reviews__rating-form form__rating"
   >
     <input
-      checked={true}
+      checked={false}
       className="form__rating-input visually-hidden"
       disabled={false}
       id="0-stars"
@@ -154,7 +154,7 @@ exports[`Should ReviewsForm render correctly 1`] = `
     name="review"
     onChange={[Function]}
     placeholder="Tell how was your stay, what you like and what can be improved"
-    value="The house among olive"
+    value=""
   />
   <div
     className="reviews__button-wrapper"

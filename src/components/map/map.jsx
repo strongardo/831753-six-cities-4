@@ -1,73 +1,66 @@
-import React, {PureComponent} from "react";
+import React, {useEffect} from "react";
 import leaflet from "leaflet";
 import PropTypes from "prop-types";
 
-class Map extends PureComponent {
-  constructor(props) {
-    super(props);
+const mapRef = React.createRef();
 
-    this._mapRef = React.createRef();
-  }
+const icon = leaflet.icon({
+  iconUrl: `/img/pin.svg`,
+  iconSize: [30, 30],
+});
 
-  componentDidMount() {
-    this._map = leaflet.map(this._mapRef.current, {
-      center: this.props.city.coordinates,
-      zoom: this.props.city.zoom,
-      zoomControl: false,
-      marker: true,
-    });
+const iconActive = leaflet.icon({
+  iconUrl: `/img/pin-active.svg`,
+  iconSize: [30, 30],
+});
 
-    this._icon = leaflet.icon({
-      iconUrl: `/img/pin.svg`,
-      iconSize: [30, 30],
-    });
+let map = null;
+let layer = null;
 
-    this._iconActive = leaflet.icon({
-      iconUrl: `/img/pin-active.svg`,
-      iconSize: [30, 30],
-    });
+const Map = (props) => {
+  const {city, markers, activeMarker} = props;
 
-    leaflet
-      .tileLayer(
-          `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`,
-          {
-            attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`,
-          }
-      )
-      .addTo(this._map);
-
-    this._addMarkers();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.activeMarker !== prevProps.activeMarker || this.props.markers !== prevProps.markers) {
-      this._map.setView(this.props.city.coordinates, this.props.city.zoom);
-      this._addMarkers();
-    }
-  }
-
-  _addMarkers() {
-    const markers = [];
-
-    this.props.markers.forEach(({coordinates, id}) => {
-      const marker = leaflet
-        .marker(coordinates, {
-          icon: id === this.props.activeMarker ? this._iconActive : this._icon,
+  useEffect(
+      () => {
+        map = leaflet.map(mapRef.current, {
+          zoomControl: false,
+          marker: true,
         });
-      markers.push(marker);
-    });
 
-    if (this._layer) {
-      this._layer.remove();
-    }
-    this._layer = leaflet.layerGroup(markers);
-    this._layer.addTo(this._map);
-  }
+        leaflet
+          .tileLayer(
+              `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`,
+              {
+                attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`,
+              }
+          )
+          .addTo(map);
+      }, []
+  );
 
-  render() {
-    return <div id="map" ref={this._mapRef} style={{height: `100%`}} />;
-  }
-}
+  useEffect(
+      () => {
+        map.setView(city.coordinates, city.zoom);
+
+        const mapMarkers = [];
+        markers.forEach(({coordinates, id}) => {
+          const marker = leaflet
+            .marker(coordinates, {
+              icon: id === activeMarker ? iconActive : icon,
+            });
+          mapMarkers.push(marker);
+        });
+
+        if (layer) {
+          layer.remove();
+        }
+        layer = leaflet.layerGroup(mapMarkers);
+        layer.addTo(map);
+      }, [activeMarker, markers]
+  );
+
+  return <div id="map" ref={mapRef} style={{height: `100%`}} />;
+};
 
 Map.propTypes = {
   city: PropTypes.shape({
